@@ -1,0 +1,23 @@
+# Cursor — stays local
+.cursor/
+.cursorignore
+
+# Editors
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Secrets / local env
+.env
+.env.*
+*.pem
+*.key
+
+# Logs / junk
+*.log
+__pycache__/
+*.pyc

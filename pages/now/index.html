@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Now · devarber</title>
+    <meta name="description" content="Qué está haciendo ahora Daniel Barbero Jiménez.">
+    <link rel="icon" type="image/png" href="/assets/img/favicon.png?v=2">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/main.css">
+</head>
+<body>
+    <canvas id="skyCanvas"></canvas>
+    <div class="sky-moon" id="skyMoon" role="button" tabindex="0" title="Doble clic" aria-label="Luna — doble clic"></div>
+    <div id="scroll-progress"></div>
+    <button id="back-to-top" aria-label="Volver arriba">↑</button>
+    <div id="toast"></div>
+    <button class="egg-btn" id="eggBtn" type="button">
+        <span class="egg-icon">🌙</span>
+        <span class="egg-text">× Cerrar <kbd>esc</kbd></span>
+    </button>
+
+    <nav class="navbar">
+        <a href="/" class="nav-logo">
+            <img src="/assets/img/avatar.png" alt="" width="32" height="32">
+            devarber
+        </a>
+        <div class="nav-links" id="navLinks">
+            <a href="/#about" data-i18n="nav_about">Sobre mí</a>
+            <span class="nav-sep">|</span>
+            <a href="/pages/tools/" data-i18n="nav_tools">Tools</a>
+            <a href="/pages/now/" class="active" data-i18n="nav_now">Now</a>
+        </div>
+        <div class="nav-right">
+            <button class="theme-btn" id="themeToggle" aria-label="Tema">☀</button>
+            <button class="lang-btn active" data-lang="es">ES</button>
+            <button class="lang-btn" data-lang="en">EN</button>
+            <button class="nav-toggle" id="navToggle" aria-label="Menú">☰</button>
+        </div>
+    </nav>
+
+    <section class="section tools-hero">
+        <h1 class="section-title" style="margin-bottom:0.6rem"><span data-i18n="now_title">Now</span></h1>
+        <p class="hero-desc" style="margin:0 0 2rem;animation:none;opacity:1;text-align:left" data-i18n="now_subtitle"></p>
+
+        <div class="now-grid">
+            <div class="now-card wide">
+                <h3 data-i18n="now_life_title">Vida</h3>
+                <p data-i18n="now_life"></p>
+            </div>
+            <div class="now-card">
+                <h3 data-i18n="now_work_title">Trabajo</h3>
+                <p data-i18n="now_work"></p>
+            </div>
+            <div class="now-card">
+                <h3 data-i18n="now_learning_title">Aprendiendo</h3>
+                <p data-i18n="now_learning"></p>
+            </div>
+            <div class="now-card wide">
+                <h3 data-i18n="now_listening_title">Escuchando</h3>
+                <p data-i18n="now_listening"></p>
+                <iframe class="now-spotify" title="Lithe, Don Toliver — Cannonball" src="https://open.spotify.com/embed/track/1FArbfTMXgDECU9zG3iY1X?utm_source=generator&theme=0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+            </div>
+            <div class="now-card wide">
+                <h3 data-i18n="now_projects_title">Side projects</h3>
+                <p class="now-projects" data-i18n="now_projects"></p>
+            </div>
+            <div class="now-card wide">
+                <h3 data-i18n="now_travel_title">Sitios que cuentan</h3>
+                <div class="flags">
+                    <span class="flag">🇪🇸 Granada</span>
+                    <span class="flag">🇪🇸 Madrid</span>
+                    <span class="flag">🇳🇱 Países Bajos</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p data-i18n="footer_built">Spain · 2026 · devarber</p>
+    </footer>
+    <script src="/assets/js/i18n.js"></script>
+    <script src="/assets/js/sky.js"></script>
+    <script src="/assets/js/common.js"></script>
+</body>
+</html>

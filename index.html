@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>devarber · Daniel Barbero Jiménez</title>
+    <meta name="description" content="Ingeniero de datos y de IA, y full stack junior. Python como estilo de vida, Windows también es un SO. Proyectos propios en órbita.">
+    <meta property="og:title" content="devarber · Daniel Barbero Jiménez">
+    <meta property="og:description" content="Data engineer · AI engineer · Full stack.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://devarber.dev">
+    <link rel="canonical" href="https://devarber.dev">
+    <link rel="icon" type="image/png" href="/assets/img/favicon.png?v=2">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Daniel Barbero Jiménez",
+        "jobTitle": "Data Engineer, AI Engineer, Full-stack Developer",
+        "url": "https://devarber.dev",
+        "email": "daniel.barberoj@gmail.com",
+        "homeLocation": {
+            "@type": "Place",
+            "name": "Granada / Madrid, Spain"
+        },
+        "sameAs": ["https://github.com/devarber-beep", "https://linkedin.com/in/danielbarero"]
+    }
+    </script>
+</head>
+<body>
+    <canvas id="skyCanvas"></canvas>
+    <div class="sky-moon" id="skyMoon" role="button" tabindex="0" title="Doble clic" aria-label="Luna — doble clic"></div>
+    <div id="scroll-progress"></div>
+    <button id="back-to-top" aria-label="Volver arriba">↑</button>
+    <div id="toast"></div>
+    <button class="egg-btn" id="eggBtn" type="button">
+        <span class="egg-icon">🌙</span>
+        <span class="egg-text">× Cerrar <kbd>esc</kbd></span>
+    </button>
+
+    <nav class="navbar">
+        <a href="/" class="nav-logo">
+            <img src="/assets/img/avatar.png" alt="" width="32" height="32">
+            devarber
+        </a>
+        <div class="nav-links" id="navLinks">
+            <a href="#about" data-i18n="nav_about">Sobre mí</a>
+            <a href="#projects" data-i18n="nav_projects">Proyectos</a>
+            <a href="#experience" data-i18n="nav_exp">Experiencia</a>
+            <a href="#firma" data-i18n="nav_firma">Destrezas</a>
+            <a href="#stack" data-i18n="nav_stack">Stack</a>
+            <a href="#contact" data-i18n="nav_contact">Contacto</a>
+            <span class="nav-sep">|</span>
+            <a href="/pages/tools/" data-i18n="nav_tools">Tools</a>
+            <a href="/pages/now/" data-i18n="nav_now">Now</a>
+        </div>
+        <div class="nav-right">
+            <button class="theme-btn" id="themeToggle" aria-label="Tema">☀</button>
+            <button class="lang-btn active" data-lang="es">ES</button>
+            <button class="lang-btn" data-lang="en">EN</button>
+            <button class="nav-toggle" id="navToggle" aria-label="Menú">☰</button>
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <div class="hero-content">
+            <p class="hero-greeting" data-i18n="greeting">Hola, soy</p>
+            <div class="hero-names">
+                <h1 class="hero-name">Daniel Barbero Jiménez</h1>
+                <p class="hero-name handle" id="heroHandle">devarber</p>
+            </div>
+            <div class="hero-avatar">
+                <img src="/assets/img/avatar.png" alt="devarber" width="168" height="168">
+            </div>
+            <h2 class="hero-title"><span id="tw-text"></span><span class="cursor"></span></h2>
+            <p class="hero-loc" data-i18n="loc">Granada ↔ Madrid</p>
+            <p class="hero-desc" data-i18n="desc">Ingeniero de datos y de IA, y full stack junior. Python como estilo de vida, Windows también es un SO. Proyectos propios en órbita.</p>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="hero-stat-num" id="expYears" data-from="2024">0+</div>
+                    <div class="hero-stat-label" data-i18n="stat_exp">Años de experiencia</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-num">4</div>
+                    <div class="hero-stat-label" data-i18n="stat_certs">Certificaciones</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-num">∞</div>
+                    <div class="hero-stat-label" data-i18n="stat_music">Horas de música</div>
+                </div>
+            </div>
+            <div class="hero-cta">
+                <a href="#projects" class="btn btn-primary"><span data-i18n="cta_projects">Proyectos</span></a>
+                <a href="#contact" class="btn btn-secondary"><span data-i18n="cta_contact">Contactar</span></a>
+            </div>
+            <div class="hero-social">
+                <a href="https://github.com/devarber-beep" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5A11.5 11.5 0 0 0 .5 12.6c0 5.35 3.44 9.9 8.2 11.5.6.12.82-.26.82-.58v-2.17c-3.34.74-4.04-1.45-4.04-1.45-.54-1.38-1.33-1.75-1.33-1.75-1.09-.76.08-.74.08-.74 1.2.08 1.84 1.26 1.84 1.26 1.07 1.86 2.8 1.32 3.48 1.01.1-.8.42-1.32.76-1.63-2.66-.31-5.46-1.36-5.46-6.06 0-1.34.46-2.44 1.24-3.3-.12-.31-.54-1.57.12-3.27 0 0 1.02-.33 3.34 1.26a11.4 11.4 0 0 1 6.08 0c2.32-1.59 3.34-1.26 3.34-1.26.66 1.7.24 2.96.12 3.27.78.86 1.24 1.96 1.24 3.3 0 4.71-2.8 5.74-5.48 6.05.44.38.82 1.12.82 2.27v3.37c0 .32.22.7.82.58 4.76-1.6 8.2-6.15 8.2-11.5A11.5 11.5 0 0 0 12 .5Z"/></svg>
+                </a>
+                <a href="https://linkedin.com/in/danielbarero" target="_blank" rel="noopener" title="LinkedIn" aria-label="LinkedIn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.22.79 24 1.77 24h20.46c.98 0 1.77-.78 1.77-1.73V1.73C24 .77 23.21 0 22.23 0z"/></svg>
+                </a>
+                <a href="mailto:daniel.barberoj@gmail.com" title="Email" aria-label="Email">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>
+                </a>
+            </div>
+        </div>
+        <div class="scroll-down" onclick="document.getElementById('terminal').scrollIntoView({behavior:'smooth'})">
+            <span data-i18n="scroll">Descubre más</span>
+            <span class="chevron">↓</span>
+        </div>
+    </section>
+
+    <section id="terminal" class="section terminal-section">
+        <h2 class="section-title terminal-label"><span data-i18n="terminal_title">./moon.sh</span></h2>
+        <div class="terminal-window">
+            <div class="term-bar">
+                <span class="term-dot red"></span>
+                <span class="term-dot yellow"></span>
+                <span class="term-dot green"></span>
+                <span class="term-title">devarber@orbit:~/site</span>
+            </div>
+            <div class="term-body" id="termBody"></div>
+        </div>
+    </section>
+
+    <section id="about" class="section">
+        <h2 class="section-title"><span class="title-text" data-i18n="about_title">Sobre mí</span></h2>
+        <div class="about-content">
+            <div class="about-text" data-i18n="about_text"></div>
+        </div>
+    </section>
+
+    <section id="projects" class="section">
+        <h2 class="section-title"><span class="title-text" data-i18n="projects_title">Proyectos</span></h2>
+        <div class="projects-grid">
+            <a class="project-card" href="https://xrforyouthethic.org" target="_blank" rel="noopener">
+                <span class="project-kicker" data-i18n="proj_luneta_kicker">XR · ética · IA</span>
+                <h3>Luneta</h3>
+                <p data-i18n="proj_luneta_d"></p>
+                <span class="project-stack">React · TypeScript · FastAPI · MongoDB · Docker · LLMs</span>
+            </a>
+            <a class="project-card" href="https://github.com/devarber-beep/MeteoPanda" target="_blank" rel="noopener">
+                <span class="project-kicker" data-i18n="proj_meteo_kicker">Datos · clima</span>
+                <h3>MeteoPanda</h3>
+                <p data-i18n="proj_meteo_d"></p>
+                <span class="project-stack">Python · ELT · DuckDB · Streamlit</span>
+            </a>
+            <div class="project-card orbit">
+                <span class="project-kicker" data-i18n="proj_orbit_kicker">En órbita</span>
+                <h3 data-i18n="proj_orbit_title">Más proyectos</h3>
+                <p data-i18n="proj_orbit_d"></p>
+                <span class="project-stack">WIP</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="experience" class="section">
+        <h2 class="section-title"><span class="title-text" data-i18n="exp_title">Experiencia</span></h2>
+        <div class="timeline">
+            <div class="timeline-item current">
+                <div class="timeline-content open-role">
+                    <div class="timeline-date" data-i18n="open_date">Actualidad</div>
+                    <div class="timeline-company"><span data-i18n="open_company">En búsqueda</span> · <span class="role" data-i18n="open_role">Data / AI / Full stack</span></div>
+                    <div class="timeline-desc" data-i18n="open_desc"></div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date" data-i18n="ceva_date">2025</div>
+                    <div class="timeline-company"><span data-i18n="ceva_company">IT Ceva Logistics</span> · <span class="role" data-i18n="ceva_role">Process Flow / IT</span></div>
+                    <div class="timeline-desc" data-i18n="ceva_desc"></div>
+                    <ul class="timeline-bullets">
+                        <li data-i18n="ceva_1"></li>
+                        <li data-i18n="ceva_2"></li>
+                        <li data-i18n="ceva_3"></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date" data-i18n="gd_date">2024 · 6 meses</div>
+                    <div class="timeline-company"><span data-i18n="gd_company">Granada Dynamics</span> · <span class="role" data-i18n="gd_role">Backend Python Developer</span></div>
+                    <ul class="timeline-bullets">
+                        <li data-i18n="gd_1"></li>
+                        <li data-i18n="gd_2"></li>
+                        <li data-i18n="gd_3"></li>
+                        <li data-i18n="gd_4"></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="firma" class="section">
+        <h2 class="section-title"><span class="title-text" data-i18n="firma_title">Destrezas</span></h2>
+        <div class="craft-grid">
+            <article class="craft-card">
+                <h3 data-i18n="craft_data_title">Ingeniería de datos</h3>
+                <p data-i18n="craft_data"></p>
+            </article>
+            <article class="craft-card">
+                <h3 data-i18n="craft_ai_title">Ingeniería de IA</h3>
+                <p data-i18n="craft_ai"></p>
+            </article>
+            <article class="craft-card wide">
+                <h3 data-i18n="craft_fs_title">Full stack</h3>
+                <p data-i18n="craft_fs"></p>
+            </article>
+        </div>
+    </section>
+
+    <section id="stack" class="section">
+        <h2 class="section-title"><span class="title-text" data-i18n="stack_title">Stack tecnológico</span></h2>
+        <div class="stack-filters" id="stackFilters">
+            <button type="button" class="active" data-filter="all" data-i18n="filter_all">Todo</button>
+            <button type="button" data-filter="langs" data-i18n="filter_langs">Lenguajes</button>
+            <button type="button" data-filter="frameworks" data-i18n="filter_frameworks">Frameworks</button>
+            <button type="button" data-filter="data" data-i18n="filter_data">Datos</button>
+            <button type="button" data-filter="cloud" data-i18n="filter_cloud">Cloud</button>
+            <button type="button" data-filter="ia" data-i18n="filter_ia">IA</button>
+            <button type="button" data-filter="dbs" data-i18n="filter_dbs">BBDD</button>
+        </div>
+        <div class="stack-grid" id="stackGrid">
+            <div data-cat="langs">
+                <div class="stack-cat-title" data-i18n="cat_langs">Lenguajes</div>
+                <div class="stack-badges">
+                    <span class="badge badge-lang">Python</span>
+                    <span class="badge badge-lang">SQL</span>
+                    <span class="badge badge-lang">JavaScript</span>
+                    <span class="badge badge-lang">TypeScript</span>
+                    <span class="badge badge-lang">Java</span>
+                </div>
+            </div>
+            <div data-cat="frameworks">
+                <div class="stack-cat-title" data-i18n="cat_frameworks">Frameworks</div>
+                <div class="stack-badges">
+                    <span class="badge badge-fw">FastAPI</span>
+                    <span class="badge badge-fw">Flask</span>
+                    <span class="badge badge-fw">React</span>
+                    <span class="badge badge-fw">Streamlit</span>
+                </div>
+            </div>
+            <div data-cat="data">
+                <div class="stack-cat-title" data-i18n="cat_data">Datos</div>
+                <div class="stack-badges">
+                    <span class="badge badge-data">Snowflake</span>
+                    <span class="badge badge-data">dbt</span>
+                    <span class="badge badge-data">pandas</span>
+                    <span class="badge badge-data">SQL</span>
+                    <span class="badge badge-data">Tableau</span>
+                    <span class="badge badge-data">DuckDB</span>
+                    <span class="badge badge-data">Streamlit</span>
+                    <span class="badge badge-data">ELT</span>
+                </div>
+            </div>
+            <div data-cat="cloud">
+                <div class="stack-cat-title" data-i18n="cat_cloud">Cloud / DevOps</div>
+                <div class="stack-badges">
+                    <span class="badge badge-cloud">AWS</span>
+                    <span class="badge badge-cloud">Docker</span>
+                    <span class="badge badge-cloud">Git</span>
+                    <span class="badge badge-cloud">CI/CD</span>
+                </div>
+            </div>
+            <div data-cat="ia">
+                <div class="stack-cat-title" data-i18n="cat_ia">IA</div>
+                <div class="stack-badges">
+                    <span class="badge badge-ai">LLM APIs</span>
+                    <span class="badge badge-ai">AI agents</span>
+                    <span class="badge badge-ai">AI-assisted dev</span>
+                    <span class="badge badge-ai">RAG / tooling</span>
+                </div>
+            </div>
+            <div data-cat="dbs">
+                <div class="stack-cat-title" data-i18n="cat_dbs">Bases de datos</div>
+                <div class="stack-badges">
+                    <span class="badge badge-db">SQL</span>
+                    <span class="badge badge-db">DuckDB</span>
+                    <span class="badge badge-db">MongoDB</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="education" class="section">
+        <h2 class="section-title"><span class="title-text" data-i18n="edu_title">Formación</span></h2>
+        <div class="edu-grid">
+            <div class="edu-card">
+                <h3 data-i18n="uni_name">Universidad de Granada</h3>
+                <span class="subtitle" data-i18n="uni_date"></span>
+            </div>
+            <div class="edu-card">
+                <h3 data-i18n="civica_name">Cívica Software</h3>
+                <span class="subtitle" data-i18n="civica_date"></span>
+            </div>
+            <div class="edu-card full">
+                <h3 data-i18n="certs_title">Certificaciones</h3>
+                <ul>
+                    <li><a href="https://www.linkedin.com/in/danielbarero/details/certifications/1723889174905/single-media-viewer/?profileId=ACoAACWJp70BIuj6S6pv0HPJOBqFsMRHkeifYSQ" target="_blank" rel="noopener">AWS Cloud Practitioner</a></li>
+                    <li><a href="https://www.linkedin.com/in/danielbarero/details/certifications/1723889110331/single-media-viewer/?profileId=ACoAACWJp70BIuj6S6pv0HPJOBqFsMRHkeifYSQ" target="_blank" rel="noopener">AWS Developer Associate</a></li>
+                    <li><a href="https://achieve.snowflake.com/34bf3b0b-6caa-4439-9ea7-8f5c86bb422d" target="_blank" rel="noopener">Snowflake Data Engineering</a></li>
+                    <li><a href="https://achieve.snowflake.com/cfd7afb0-4baf-4b2a-b28b-8821aad342db" target="_blank" rel="noopener">Snowflake Data Warehousing</a></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section">
+        <h2 class="section-title"><span class="title-text" data-i18n="contact_title">Contacto</span></h2>
+        <div class="contact-grid" id="contactGrid">
+            <div class="contact-card" id="emailCard">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>
+                <span class="label">Email</span>
+                <span class="value">daniel.barberoj@gmail.com</span>
+                <div class="contact-form" id="contactForm">
+                    <input id="formName" type="text" data-i18n-placeholder="form_name" placeholder="Nombre">
+                    <textarea id="formMsg" data-i18n-placeholder="form_msg" placeholder="Mensaje"></textarea>
+                    <div class="form-actions">
+                        <button type="button" class="form-close" id="formClose" data-i18n="form_close">Cerrar</button>
+                        <button type="button" class="form-send" id="formSend" data-i18n="form_send">Enviar</button>
+                    </div>
+                </div>
+            </div>
+            <a class="contact-card" href="https://linkedin.com/in/danielbarero" target="_blank" rel="noopener">
+                <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.22.79 24 1.77 24h20.46c.98 0 1.77-.78 1.77-1.73V1.73C24 .77 23.21 0 22.23 0z"/></svg>
+                <span class="label">LinkedIn</span>
+                <span class="value">danielbarero</span>
+            </a>
+            <a class="contact-card" href="https://github.com/devarber-beep" target="_blank" rel="noopener">
+                <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5A11.5 11.5 0 0 0 .5 12.6c0 5.35 3.44 9.9 8.2 11.5.6.12.82-.26.82-.58v-2.17c-3.34.74-4.04-1.45-4.04-1.45-.54-1.38-1.33-1.75-1.33-1.75-1.09-.76.08-.74.08-.74 1.2.08 1.84 1.26 1.84 1.26 1.07 1.86 2.8 1.32 3.48 1.01.1-.8.42-1.32.76-1.63-2.66-.31-5.46-1.36-5.46-6.06 0-1.34.46-2.44 1.24-3.3-.12-.31-.54-1.57.12-3.27 0 0 1.02-.33 3.34 1.26a11.4 11.4 0 0 1 6.08 0c2.32-1.59 3.34-1.26 3.34-1.26.66 1.7.24 2.96.12 3.27.78.86 1.24 1.96 1.24 3.3 0 4.71-2.8 5.74-5.48 6.05.44.38.82 1.12.82 2.27v3.37c0 .32.22.7.82.58 4.76-1.6 8.2-6.15 8.2-11.5A11.5 11.5 0 0 0 12 .5Z"/></svg>
+                <span class="label">GitHub</span>
+                <span class="value">devarber-beep</span>
+            </a>
+            <a class="contact-card" href="/cv.html" target="_blank">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h9l5 5v13H6z"/><path d="M15 3v5h5"/><path d="M8 13h8M8 17h6"/></svg>
+                <span class="label" data-i18n="cv_label">CV</span>
+                <span class="value" data-i18n="cv_value">HTML · imprimible</span>
+            </a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p data-i18n="footer_built">Spain · 2026 · devarber</p>
+    </footer>
+
+    <div id="musicDock" class="music-dock" hidden>
+        <div class="music-bar">
+            <span>Lithe, Don Toliver — Cannonball</span>
+            <button type="button" class="music-close" id="musicClose" aria-label="Cerrar">×</button>
+        </div>
+        <iframe id="musicFrame" title="Lithe, Don Toliver — Cannonball" data-src="https://open.spotify.com/embed/track/1FArbfTMXgDECU9zG3iY1X?utm_source=generator&theme=0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    </div>
+
+    <script src="/assets/js/i18n.js"></script>
+    <script src="/assets/js/sky.js"></script>
+    <script src="/assets/js/common.js"></script>
+    <script src="/assets/js/home.js"></script>
+</body>
+</html>

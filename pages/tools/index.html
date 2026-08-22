@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tools · devarber</title>
+    <meta name="description" content="Toolkit local: SQL, JWT, CSV, cron, JSON y más.">
+    <link rel="icon" type="image/png" href="/assets/img/favicon.png?v=2">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/main.css">
+</head>
+<body>
+    <canvas id="skyCanvas"></canvas>
+    <div class="sky-moon" id="skyMoon" role="button" tabindex="0" title="Doble clic" aria-label="Luna — doble clic"></div>
+    <div id="scroll-progress"></div>
+    <button id="back-to-top" aria-label="Volver arriba">↑</button>
+    <div id="toast"></div>
+    <button class="egg-btn" id="eggBtn" type="button">
+        <span class="egg-icon">🌙</span>
+        <span class="egg-text">× Cerrar <kbd>esc</kbd></span>
+    </button>
+
+    <nav class="navbar">
+        <a href="/" class="nav-logo">
+            <img src="/assets/img/avatar.png" alt="" width="32" height="32">
+            devarber
+        </a>
+        <div class="nav-links" id="navLinks">
+            <a href="/">Inicio</a>
+            <span class="nav-sep">|</span>
+            <a href="/pages/tools/" class="active" data-i18n="nav_tools">Tools</a>
+            <a href="/pages/now/" data-i18n="nav_now">Now</a>
+        </div>
+        <div class="nav-right">
+            <button class="theme-btn" id="themeToggle" aria-label="Tema">☀</button>
+            <button class="lang-btn active" data-lang="es">ES</button>
+            <button class="lang-btn" data-lang="en">EN</button>
+            <button class="nav-toggle" id="navToggle" aria-label="Menú">☰</button>
+        </div>
+    </nav>
+
+    <section class="section tools-hero">
+        <h1 class="section-title" style="margin-bottom:0.5rem"><span data-i18n="tools_title">Toolkit</span></h1>
+        <p class="hero-desc" style="margin:0;animation:none;opacity:1;text-align:left" data-i18n="tools_sub"></p>
+        <p style="color:var(--faint);font-size:0.8rem;font-family:var(--font-mono);margin:0.6rem 0 1.6rem" data-i18n="tools_count">11 herramientas</p>
+
+        <div class="tools-grid" id="toolsCatalog">
+            <a class="tool-card" href="#cron" data-open-tool="cron"><h3 data-i18n="tool_cron"></h3><p data-i18n="tool_cron_d"></p></a>
+            <a class="tool-card" href="#ts" data-open-tool="ts"><h3 data-i18n="tool_ts"></h3><p data-i18n="tool_ts_d"></p></a>
+            <a class="tool-card" href="#json" data-open-tool="json"><h3 data-i18n="tool_json"></h3><p data-i18n="tool_json_d"></p></a>
+            <a class="tool-card" href="#regex" data-open-tool="regex"><h3 data-i18n="tool_regex"></h3><p data-i18n="tool_regex_d"></p></a>
+            <a class="tool-card" href="#sql" data-open-tool="sql"><h3 data-i18n="tool_sql"></h3><p data-i18n="tool_sql_d"></p></a>
+            <a class="tool-card" href="#yaml" data-open-tool="yaml"><h3 data-i18n="tool_yaml"></h3><p data-i18n="tool_yaml_d"></p></a>
+            <a class="tool-card" href="#jwt" data-open-tool="jwt"><h3 data-i18n="tool_jwt"></h3><p data-i18n="tool_jwt_d"></p></a>
+            <a class="tool-card" href="#csv" data-open-tool="csv"><h3 data-i18n="tool_csv"></h3><p data-i18n="tool_csv_d"></p></a>
+            <a class="tool-card" href="#diff" data-open-tool="diff"><h3 data-i18n="tool_diff"></h3><p data-i18n="tool_diff_d"></p></a>
+            <a class="tool-card" href="#bpm" data-open-tool="bpm"><h3 data-i18n="tool_bpm"></h3><p data-i18n="tool_bpm_d"></p></a>
+            <a class="tool-card" href="#key" data-open-tool="key"><h3 data-i18n="tool_key"></h3><p data-i18n="tool_key_d"></p></a>
+        </div>
+
+        <div id="toolPanels">
+            <div class="tool-panel card" data-tool="cron" style="padding:1.4rem">
+                <button type="button" class="tool-back" data-i18n="tool_back"></button>
+                <h2 data-i18n="tool_cron"></h2>
+                <div class="tool-ui">
+                    <div class="chips">
+                        <button type="button" class="chip" data-cron="*/5 * * * *">cada 5 min</button>
+                        <button type="button" class="chip" data-cron="0 * * * *">cada hora</button>
+                        <button type="button" class="chip" data-cron="0 9 * * 1-5">9 AM laborables</button>
+                        <button type="button" class="chip" data-cron="@daily">@daily</button>
+                    </div>
+                    <label>Expresión cron</label>
+                    <input id="cronExpr" value="*/5 * * * *">
+                    <pre id="cronOut" class="term-output" style="margin-top:1rem;white-space:pre-wrap"></pre>
+                </div>
+            </div>
+
+            <div class="tool-panel card" data-tool="ts" style="padding:1.4rem">
+                <button type="button" class="tool-back" data-i18n="tool_back"></button>
+                <h2 data-i18n="tool_ts"></h2>
+                <div class="tool-ui">
+                    <div class="row"><button type="button" class="chip" id="tsNow">Ahora</button></div>
+                    <label>Timestamp o ISO</label>
+                    <input id="tsIn" placeholder="1710000000">
+                    <pre id="tsOut" style="margin-top:1rem;white-space:pre-wrap;color:var(--muted)"></pre>
+                </div>
+            </div>
+
+            <div class="tool-panel card" data-tool="json" style="padding:1.4rem">
+                <button type="button" class="tool-back" data-i18n="tool_back"></button>
+                <h2 data-i18n="tool_json"></h2>
+                <div class="tool-ui">
+                    <textarea id="jsonIn" placeholder='{"ok": true}'></textarea>
+                    <div class="row">
+                        <button type="button" class="btn btn-primary" id="jsonPretty">Formatear</button>
+                        <button type="button" class="btn btn-secondary" id="jsonMini">Minificar</button>
+                    </div>
+                    <pre id="jsonOut" style="white-space:pre-wrap;color:var(--muted)"></pre>
+                </div>
+            </div>
+
+            <div class="tool-panel card" data-tool="regex" style="padding:1.4rem">
+                <button type="button" class="tool-back" data-i18n="tool_back"></button>
+                <h2 data-i18n="tool_regex"></h2>
+                <div class="tool-ui">
+                    <label>Pattern</label>
+                    <input id="rePat" placeholder="\\w+">
+                    <div class="chips">
+                        <label><input type="checkbox" id="flag-g" checked> g</label>
+                        <label><input type="checkbox" id="flag-i"> i</label>
+                        <label><input type="checkbox" id="flag-m"> m</label>
+                        <label><input type="checkbox" id="flag-s"> s</label>
+                    </div>
+                    <label>Texto</label>
+                    <textarea id="reText"></textarea>
+                    <div id="reOut" style="margin-top:0.8rem;color:var(--muted);font-family:var(--font-mono);font-size:0.82rem"></div>
+                </div>
+            </div>
+
+            <div class="tool-panel card" data-tool="sql" style="padding:1.4rem">
+                <button type="button" class="tool-back" data-i18n="tool_back"></button>
+                <h2 data-i18n="tool_sql"></h2>
+                <div class="tool-ui">
+                    <textarea id="sqlIn" placeholder="select a, b from orders o join users u on u.id = o.user_id where o.ts >= '2025-01-01'"></textarea>
+                    <div class="row">
+                        <button type="button" class="btn btn-primary" id="sqlFmt">Formatear</button>
+                    </div>
+                    <pre id="sqlOut" style="white-space:pre-wrap;color:var(--muted)"></pre>
+                </div>
+            </div>
+
+            <div class="tool-panel card" data-tool="yaml" style="padding:1.4rem">
+                <button type="button" class="tool-back" data-i18n="tool_back"></button>
+                <h2 data-i18n="tool_yaml"></h2>
+                <div class="tool-ui">
+                    <label>Entrada</label>
+                    <textarea id="yamlIn" placeholder="name: devarber"></textarea>
+                    <div class="row">
+                        <button type="button" class="btn btn-primary" id="toJson">→ JSON</button>
+                        <button type="button" class="btn btn-secondary" id="toYaml">→ YAML</button>
+                    </div>
+                    <label>Resultado</label>
+                    <textarea id="yamlOut" readonly></textarea>
+                </div>
+            </div>
+
+            <div class="tool-panel card" data-tool="jwt" style="padding:1.4rem">
+                <button type="button" class="tool-back" data-i18n="tool_back"></button>
+                <h2 data-i18n="tool_jwt"></h2>
+                <div class="tool-ui">
+                    <label>Token</label>
+                    <textarea id="jwtIn" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZXZhcmJlciJ9.sig"></textarea>
+                    <div class="row">
+                        <button type="button" class="btn btn-primary" id="jwtDec">Decodificar</button>
+                    </div>
+                    <pre id="jwtOut" style="white-space:pre-wrap;color:var(--muted)"></pre>
+                </div>
+            </div>
+
+            <div class="tool-panel card" data-tool="csv" style="padding:1.4rem">
+                <button type="button" class="tool-back" data-i18n="tool_back"></button>
+                <h2 data-i18n="tool_csv"></h2>
+                <div class="tool-ui">
+                    <textarea id="csvIn" placeholder='city,temp&#10;Granada,34&#10;Madrid,31'></textarea>
+                    <div class="row">
+                        <button type="button" class="btn btn-primary" id="csvToJson">CSV → JSON</button>
+                        <button type="button" class="btn btn-secondary" id="jsonToCsv">JSON → CSV</button>
+                    </div>
+                    <textarea id="csvOut" readonly></textarea>
+                </div>
+            </div>
+
+            <div class="tool-panel card" data-tool="diff" style="padding:1.4rem">
+                <button type="button" class="tool-back" data-i18n="tool_back"></button>
+                <h2 data-i18n="tool_diff"></h2>
+                <div class="tool-ui">
+                    <div class="diff-grid">
+                        <textarea id="diffA" placeholder="Original"></textarea>
+                        <textarea id="diffB" placeholder="Modificado"></textarea>
+                    </div>
+                    <div class="row"><button type="button" class="btn btn-primary" id="diffGo">Comparar</button></div>
+                    <div id="diffOut" class="diff-out" style="font-family:var(--font-mono);font-size:0.8rem;white-space:pre-wrap"></div>
+                </div>
+            </div>
+            <div class="tool-panel card" data-tool="bpm" style="padding:1.4rem">
+                <button type="button" class="tool-back" data-i18n="tool_back"></button>
+                <h2 data-i18n="tool_bpm"></h2>
+                <div class="tool-ui">
+                    <button type="button" class="bpm-pad" id="bpmTap">tap</button>
+                    <pre id="bpmOut" style="margin-top:1rem;white-space:pre-wrap;color:var(--muted)">Pulsa al ritmo.</pre>
+                    <div class="row"><button type="button" class="btn btn-secondary" id="bpmReset">Reset</button></div>
+                </div>
+            </div>
+
+            <div class="tool-panel card" data-tool="key" style="padding:1.4rem">
+                <button type="button" class="tool-back" data-i18n="tool_back"></button>
+                <h2 data-i18n="tool_key"></h2>
+                <div class="tool-ui">
+                    <label>Audio (mp3, wav, m4a…)</label>
+                    <input type="file" id="keyFile" accept="audio/*">
+                    <pre id="keyOut" style="margin-top:1rem;white-space:pre-wrap;color:var(--muted)">Elige un archivo. No sale de tu navegador.</pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer"><p data-i18n="footer_built">Spain · 2026 · devarber</p></footer>
+    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+    <script src="/assets/js/i18n.js"></script>
+    <script src="/assets/js/sky.js"></script>
+    <script src="/assets/js/common.js"></script>
+    <script src="/assets/js/tools.js"></script>
+</body>
+</html>
