@@ -256,8 +256,8 @@ html.light .sky-moon {
     margin: 0 auto;
 }
 .hero-avatar {
-    width: 168px;
-    height: 168px;
+    width: 260px;
+    height: 260px;
     margin: 0.7rem auto 0.25rem;
     padding: 0;
     background: transparent;
@@ -1039,7 +1039,7 @@ html.light .terminal-window { background: #1b2434; }
     .edu-grid, .now-grid, .diff-grid, .craft-grid, .projects-grid { grid-template-columns: 1fr; }
     .sky-moon { right: 1.2rem; width: 72px; height: 72px; top: 5.5rem; }
     .hero-content { margin-left: 0; padding-right: 0; }
-    .hero-avatar { width: 128px; height: 128px; margin: 0.5rem auto 0.1rem; padding: 0; }
+    .hero-avatar { width: 190px; height: 190px; margin: 0.5rem auto 0.1rem; padding: 0; }
     .scroll-down { margin-left: 0; align-items: center; }
     .hero-stats { gap: 1.4rem; }
     .orbit-badge { right: 1.2rem; bottom: 4.2rem; }
