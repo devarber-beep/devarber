@@ -7,7 +7,6 @@ window.uiLang = localStorage.getItem("uiLang") || (window.currentLang === "en" ?
 function applyI18n(lang) {
     document.querySelectorAll("[data-i18n]").forEach((el) => {
         const k = el.getAttribute("data-i18n");
-        if (k === "title") return;
         const v = t(k, lang);
         if (v == null) return;
         if (el.classList.contains("title-text") || el.dataset.i18nText === "1") el.textContent = v;
@@ -84,11 +83,7 @@ window.addEventListener("scroll", () => {
 });
 
 document.querySelectorAll(".section").forEach((s) => {
-    s.classList.add("reveal");
-    const rObs = new IntersectionObserver((entries) => {
-        entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("visible"); });
-    }, { threshold: 0.1 });
-    rObs.observe(s);
+    s.classList.add("visible");
 });
 
 const backBtn = document.getElementById("back-to-top");

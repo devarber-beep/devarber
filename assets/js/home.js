@@ -1,54 +1,13 @@
 (function () {
-    let twTimeout;
-    function typewriter(el, text, speed) {
-        if (!el) return;
-        el.textContent = "";
-        const cursor = el.nextElementSibling;
-        if (cursor) cursor.classList.add("typing");
-        let i = 0;
-        clearTimeout(twTimeout);
-        function step() {
-            if (i < text.length) {
-                el.textContent += text[i++];
-                twTimeout = setTimeout(step, speed);
-            } else if (cursor) cursor.classList.remove("typing");
-        }
-        step();
-    }
-
-    function startTitle() {
-        typewriter(document.getElementById("tw-text"), t("title"), 38);
-    }
-    startTitle();
-    window.addEventListener("langchange", startTitle);
-
     const expEl = document.getElementById("expYears");
     if (expEl) {
         const startYear = parseInt(expEl.dataset.from, 10);
         const target = Math.max(1, new Date().getFullYear() - startYear);
-        const expObs = new IntersectionObserver((entries) => {
-            entries.forEach((e) => {
-                if (!e.isIntersecting) return;
-                let current = 0;
-                const timer = setInterval(() => {
-                    current += 1;
-                    if (current >= target) {
-                        current = target;
-                        clearInterval(timer);
-                    }
-                    expEl.textContent = current + "+";
-                }, 90);
-                expObs.unobserve(expEl);
-            });
-        }, { threshold: 0.5 });
-        expObs.observe(expEl);
+        expEl.textContent = target + "+";
     }
 
     document.querySelectorAll(".timeline-item").forEach((item) => {
-        const tl = new IntersectionObserver((entries) => {
-            entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("visible"); });
-        }, { threshold: 0.15 });
-        tl.observe(item);
+        item.classList.add("visible");
     });
 
     document.querySelectorAll("#stackFilters button").forEach((btn) => {

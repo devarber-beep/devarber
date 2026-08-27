@@ -52,10 +52,8 @@
             <a href="#projects" data-i18n="nav_projects">Proyectos</a>
             <a href="#experience" data-i18n="nav_exp">Experiencia</a>
             <a href="#firma" data-i18n="nav_firma">Destrezas</a>
-            <a href="#stack" data-i18n="nav_stack">Stack</a>
             <a href="#contact" data-i18n="nav_contact">Contacto</a>
             <span class="nav-sep">|</span>
-            <a href="/pages/tools/" data-i18n="nav_tools">Tools</a>
             <a href="/pages/now/" data-i18n="nav_now">Now</a>
         </div>
         <div class="nav-right">
@@ -76,12 +74,12 @@
             <div class="hero-avatar">
                 <img src="/assets/img/avatar.png" alt="devarber" width="260" height="260">
             </div>
-            <h2 class="hero-title"><span id="tw-text"></span><span class="cursor"></span></h2>
+            <h2 class="hero-title" id="tw-text" data-i18n="title">Data engineer · AI engineer · Full stack</h2>
             <p class="hero-loc" data-i18n="loc">Granada ↔ Madrid</p>
             <p class="hero-desc" data-i18n="desc">Ingeniero de datos y de IA, y full stack junior. Python como estilo de vida, Windows también es un SO. Proyectos propios en órbita.</p>
             <div class="hero-stats">
                 <div class="hero-stat">
-                    <div class="hero-stat-num" id="expYears" data-from="2024">0+</div>
+                    <div class="hero-stat-num" id="expYears" data-from="2024">2+</div>
                     <div class="hero-stat-label" data-i18n="stat_exp">Años de experiencia</div>
                 </div>
                 <div class="hero-stat">
@@ -109,22 +107,9 @@
                 </a>
             </div>
         </div>
-        <div class="scroll-down" onclick="document.getElementById('terminal').scrollIntoView({behavior:'smooth'})">
+        <div class="scroll-down" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">
             <span data-i18n="scroll">Descubre más</span>
             <span class="chevron">↓</span>
-        </div>
-    </section>
-
-    <section id="terminal" class="section terminal-section">
-        <h2 class="section-title terminal-label"><span data-i18n="terminal_title">./moon.sh</span></h2>
-        <div class="terminal-window">
-            <div class="term-bar">
-                <span class="term-dot red"></span>
-                <span class="term-dot yellow"></span>
-                <span class="term-dot green"></span>
-                <span class="term-title">devarber@orbit:~/site</span>
-            </div>
-            <div class="term-body" id="termBody"></div>
         </div>
     </section>
 
@@ -214,79 +199,6 @@
         </div>
     </section>
 
-    <section id="stack" class="section">
-        <h2 class="section-title"><span class="title-text" data-i18n="stack_title">Stack tecnológico</span></h2>
-        <div class="stack-filters" id="stackFilters">
-            <button type="button" class="active" data-filter="all" data-i18n="filter_all">Todo</button>
-            <button type="button" data-filter="langs" data-i18n="filter_langs">Lenguajes</button>
-            <button type="button" data-filter="frameworks" data-i18n="filter_frameworks">Frameworks</button>
-            <button type="button" data-filter="data" data-i18n="filter_data">Datos</button>
-            <button type="button" data-filter="cloud" data-i18n="filter_cloud">Cloud</button>
-            <button type="button" data-filter="ia" data-i18n="filter_ia">IA</button>
-            <button type="button" data-filter="dbs" data-i18n="filter_dbs">BBDD</button>
-        </div>
-        <div class="stack-grid" id="stackGrid">
-            <div data-cat="langs">
-                <div class="stack-cat-title" data-i18n="cat_langs">Lenguajes</div>
-                <div class="stack-badges">
-                    <span class="badge badge-lang">Python</span>
-                    <span class="badge badge-lang">SQL</span>
-                    <span class="badge badge-lang">JavaScript</span>
-                    <span class="badge badge-lang">TypeScript</span>
-                    <span class="badge badge-lang">Java</span>
-                </div>
-            </div>
-            <div data-cat="frameworks">
-                <div class="stack-cat-title" data-i18n="cat_frameworks">Frameworks</div>
-                <div class="stack-badges">
-                    <span class="badge badge-fw">FastAPI</span>
-                    <span class="badge badge-fw">Flask</span>
-                    <span class="badge badge-fw">React</span>
-                    <span class="badge badge-fw">Streamlit</span>
-                </div>
-            </div>
-            <div data-cat="data">
-                <div class="stack-cat-title" data-i18n="cat_data">Datos</div>
-                <div class="stack-badges">
-                    <span class="badge badge-data">Snowflake</span>
-                    <span class="badge badge-data">dbt</span>
-                    <span class="badge badge-data">pandas</span>
-                    <span class="badge badge-data">SQL</span>
-                    <span class="badge badge-data">Tableau</span>
-                    <span class="badge badge-data">DuckDB</span>
-                    <span class="badge badge-data">Streamlit</span>
-                    <span class="badge badge-data">ELT</span>
-                </div>
-            </div>
-            <div data-cat="cloud">
-                <div class="stack-cat-title" data-i18n="cat_cloud">Cloud / DevOps</div>
-                <div class="stack-badges">
-                    <span class="badge badge-cloud">AWS</span>
-                    <span class="badge badge-cloud">Docker</span>
-                    <span class="badge badge-cloud">Git</span>
-                    <span class="badge badge-cloud">CI/CD</span>
-                </div>
-            </div>
-            <div data-cat="ia">
-                <div class="stack-cat-title" data-i18n="cat_ia">IA</div>
-                <div class="stack-badges">
-                    <span class="badge badge-ai">LLM APIs</span>
-                    <span class="badge badge-ai">AI agents</span>
-                    <span class="badge badge-ai">AI-assisted dev</span>
-                    <span class="badge badge-ai">RAG / tooling</span>
-                </div>
-            </div>
-            <div data-cat="dbs">
-                <div class="stack-cat-title" data-i18n="cat_dbs">Bases de datos</div>
-                <div class="stack-badges">
-                    <span class="badge badge-db">SQL</span>
-                    <span class="badge badge-db">DuckDB</span>
-                    <span class="badge badge-db">MongoDB</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <section id="education" class="section">
         <h2 class="section-title"><span class="title-text" data-i18n="edu_title">Formación</span></h2>
         <div class="edu-grid">
@@ -336,25 +248,12 @@
                 <span class="label">GitHub</span>
                 <span class="value">devarber-beep</span>
             </a>
-            <a class="contact-card" href="/cv.html" target="_blank">
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h9l5 5v13H6z"/><path d="M15 3v5h5"/><path d="M8 13h8M8 17h6"/></svg>
-                <span class="label" data-i18n="cv_label">CV</span>
-                <span class="value" data-i18n="cv_value">HTML · imprimible</span>
-            </a>
         </div>
     </section>
 
     <footer class="footer">
         <p data-i18n="footer_built">Spain · 2026 · devarber</p>
     </footer>
-
-    <div id="musicDock" class="music-dock" hidden>
-        <div class="music-bar">
-            <span>Lithe, Don Toliver — Cannonball</span>
-            <button type="button" class="music-close" id="musicClose" aria-label="Cerrar">×</button>
-        </div>
-        <iframe id="musicFrame" title="Lithe, Don Toliver — Cannonball" data-src="https://open.spotify.com/embed/track/1FArbfTMXgDECU9zG3iY1X?utm_source=generator&theme=0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-    </div>
 
     <script src="/assets/js/i18n.js"></script>
     <script src="/assets/js/sky.js"></script>

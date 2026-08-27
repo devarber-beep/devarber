@@ -227,14 +227,11 @@ html.light .sky-moon {
     background: var(--line);
 }
 .section-title.terminal-label::before { content: "$"; font-family: var(--font-mono); color: var(--star); }
-.reveal { opacity: 0; transform: translateY(24px); transition: 0.65s ease; }
+.reveal { opacity: 1; transform: none; }
 .reveal.visible { opacity: 1; transform: none; }
 .title-text {
     display: inline-block;
-    clip-path: inset(0 100% 0 0);
-    transition: clip-path 0.9s cubic-bezier(0.65, 0, 0.35, 1);
 }
-.reveal.visible .title-text { clip-path: inset(0 0 0 0); }
 
 .hero-section {
     min-height: 92vh;
@@ -261,8 +258,6 @@ html.light .sky-moon {
     margin: 0.7rem auto 0.25rem;
     padding: 0;
     background: transparent;
-    opacity: 0;
-    animation: fadeInUp 0.8s ease 0.28s forwards;
 }
 .hero-avatar img {
     width: 100%;
@@ -283,8 +278,6 @@ html.light .sky-moon {
     font-size: 0.92rem;
     color: var(--star);
     margin-bottom: 0.65rem;
-    opacity: 0;
-    animation: fadeInUp 0.8s ease forwards;
 }
 .hero-names {
     margin-bottom: 0.45rem;
@@ -299,12 +292,9 @@ html.light .sky-moon {
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    opacity: 0;
-    animation: fadeInUp 0.8s ease 0.15s forwards;
     user-select: none;
 }
 .hero-name.handle {
-    animation-delay: 0.22s;
     cursor: pointer;
 }
 .hero-title {
@@ -313,16 +303,8 @@ html.light .sky-moon {
     font-weight: 400;
     min-height: 1.6em;
     margin-bottom: 0.45rem;
-    opacity: 0;
-    animation: fadeInUp 0.8s ease 0.3s forwards;
     font-family: var(--font-mono);
 }
-.hero-title .cursor {
-    border-right: 2px solid var(--star);
-    margin-left: 2px;
-    animation: blink 0.85s infinite;
-}
-.hero-title .cursor.typing { animation: none; }
 .hero-loc {
     font-family: var(--font-mono);
     font-size: 0.78rem;
@@ -330,8 +312,6 @@ html.light .sky-moon {
     text-transform: uppercase;
     color: var(--gold);
     margin: 0 0 1.1rem;
-    opacity: 0;
-    animation: fadeInUp 0.8s ease 0.38s forwards;
 }
 .hero-desc {
     font-size: 1.12rem;
@@ -339,16 +319,12 @@ html.light .sky-moon {
     color: var(--muted);
     max-width: 640px;
     margin: 0 auto 2.25rem;
-    opacity: 0;
-    animation: fadeInUp 0.8s ease 0.45s forwards;
 }
 .hero-stats {
     display: flex;
     justify-content: center;
     gap: 2.75rem;
     margin-bottom: 2.4rem;
-    opacity: 0;
-    animation: fadeInUp 0.8s ease 0.55s forwards;
     flex-wrap: wrap;
 }
 .hero-stat-num {
@@ -364,8 +340,6 @@ html.light .sky-moon {
     justify-content: center;
     flex-wrap: wrap;
     margin-bottom: 2rem;
-    opacity: 0;
-    animation: fadeInUp 0.8s ease 0.65s forwards;
 }
 .btn {
     padding: 0.8rem 1.45rem;
@@ -395,8 +369,6 @@ html.light .sky-moon {
     display: flex;
     gap: 0.85rem;
     justify-content: center;
-    opacity: 0;
-    animation: fadeInUp 0.8s ease 0.8s forwards;
 }
 .hero-social a {
     width: 44px; height: 44px;
@@ -422,11 +394,8 @@ html.light .sky-moon {
     font-family: var(--font-mono);
     cursor: pointer;
     padding: 1rem 0 2rem;
-    opacity: 0;
-    animation: fadeInUp 0.8s ease 1s forwards;
 }
 .scroll-down:hover { color: var(--gold); }
-.scroll-down .chevron { animation: bounceArrow 1.6s infinite; }
 
 .card, .about-content, .timeline-content, .firma-box, .edu-card, .contact-card, .tool-card, .now-card {
     background: var(--bg-elev);
@@ -450,11 +419,7 @@ html.light .sky-moon {
 .timeline-item {
     position: relative;
     margin-bottom: 1.75rem;
-    opacity: 0;
-    transform: translateX(-16px);
-    transition: 0.55s ease;
 }
-.timeline-item.visible { opacity: 1; transform: none; }
 .timeline-item::before {
     content: "";
     position: absolute;
@@ -789,7 +754,6 @@ html.light .terminal-window { background: #1b2434; }
     width: 6px; height: 6px;
     border-radius: 50%;
     background: var(--gold);
-    animation: pulseDot 2s infinite;
 }
 
 .egg-btn {
