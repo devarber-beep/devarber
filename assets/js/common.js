@@ -7,6 +7,7 @@ window.uiLang = localStorage.getItem("uiLang") || (window.currentLang === "en" ?
 function applyI18n(lang) {
     document.querySelectorAll("[data-i18n]").forEach((el) => {
         const k = el.getAttribute("data-i18n");
+        if (k === "title") return;
         const v = t(k, lang);
         if (v == null) return;
         if (el.classList.contains("title-text") || el.dataset.i18nText === "1") el.textContent = v;
@@ -83,7 +84,11 @@ window.addEventListener("scroll", () => {
 });
 
 document.querySelectorAll(".section").forEach((s) => {
-    s.classList.add("visible");
+    s.classList.add("reveal");
+    const rObs = new IntersectionObserver((entries) => {
+        entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("visible"); });
+    }, { threshold: 0.1 });
+    rObs.observe(s);
 });
 
 const backBtn = document.getElementById("back-to-top");
@@ -128,9 +133,12 @@ document.addEventListener("keydown", (e) => {
     if (e.key === "l" || e.key === "L") setLanguage("l");
     if (e.key === "Escape") {
         const dock = document.getElementById("musicDock");
-        if (dock && !dock.hidden) {
-            dock.classList.remove("open");
-            dock.hidden = true;
+        if (dock && dock.classList.contains("open")) {
+            if (window.closeMusicDock) window.closeMusicDock();
+            else {
+                dock.classList.remove("open");
+                dock.setAttribute("aria-hidden", "true");
+            }
             return;
         }
         if (window.skyNameOn && window.setNameConstellation) {
@@ -143,5 +151,42 @@ document.addEventListener("keydown", (e) => {
 
 const eggBtn = document.getElementById("eggBtn");
 if (eggBtn) eggBtn.addEventListener("click", () => setLanguage(window.uiLang || "es"));
+
+(function cursorHalo() {
+    const el = document.getElementById("cursorHalo");
+    if (!el) return;
+    const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (!fine.matches || reduce.matches) return;
+
+    let x = window.innerWidth * 0.5;
+    let y = window.innerHeight * 0.35;
+    let tx = x;
+    let ty = y;
+    let raf = 0;
+
+    function paint() {
+        x += (tx - x) * 0.16;
+        y += (ty - y) * 0.16;
+        el.style.setProperty("--halo-x", x.toFixed(1) + "px");
+        el.style.setProperty("--halo-y", y.toFixed(1) + "px");
+        if (Math.abs(tx - x) > 0.4 || Math.abs(ty - y) > 0.4) {
+            raf = requestAnimationFrame(paint);
+        } else {
+            raf = 0;
+        }
+    }
+
+    window.addEventListener("mousemove", (e) => {
+        tx = e.clientX;
+        ty = e.clientY;
+        el.classList.add("is-on");
+        if (!raf) raf = requestAnimationFrame(paint);
+    }, { passive: true });
+
+    document.documentElement.addEventListener("mouseleave", () => {
+        el.classList.remove("is-on");
+    });
+})();
 
 setLanguage(localStorage.getItem("lang") === "en" ? "en" : "es");

@@ -13,6 +13,7 @@
 </head>
 <body>
     <canvas id="skyCanvas"></canvas>
+    <div id="cursorHalo" class="cursor-halo" aria-hidden="true"></div>
     <div class="sky-moon" id="skyMoon" role="button" tabindex="0" title="Doble clic" aria-label="Luna — doble clic"></div>
     <div id="scroll-progress"></div>
     <button id="back-to-top" aria-label="Volver arriba">↑</button>
@@ -29,8 +30,14 @@
         </a>
         <div class="nav-links" id="navLinks">
             <a href="/#about" data-i18n="nav_about">Sobre mí</a>
+            <a href="/#projects" data-i18n="nav_projects">Proyectos</a>
+            <a href="/#experience" data-i18n="nav_exp">Recorrido</a>
+            <a href="/#firma" data-i18n="nav_firma">Destrezas</a>
+            <a href="/#stack" data-i18n="nav_stack">Stack</a>
+            <a href="/#contact" data-i18n="nav_contact">Contacto</a>
             <span class="nav-sep">|</span>
             <a href="/pages/now/" class="active" data-i18n="nav_now">Now</a>
+            <a href="/pages/tools/" data-i18n="nav_tools">Music tools</a>
         </div>
         <div class="nav-right">
             <button class="theme-btn" id="themeToggle" aria-label="Tema">☀</button>
@@ -63,7 +70,7 @@
                 <iframe class="now-spotify" title="Lithe, Don Toliver — Cannonball" src="https://open.spotify.com/embed/track/1FArbfTMXgDECU9zG3iY1X?utm_source=generator&theme=0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
             </div>
             <div class="now-card wide">
-                <h3 data-i18n="now_projects_title">Side projects</h3>
+                <h3 data-i18n="now_projects_title">Proyectos propios</h3>
                 <p class="now-projects" data-i18n="now_projects"></p>
             </div>
             <div class="now-card wide">

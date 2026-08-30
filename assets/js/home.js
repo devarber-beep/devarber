@@ -1,13 +1,132 @@
 (function () {
+    let twTimeout;
+    function typewriter(el, text, speed) {
+        if (!el) return;
+        el.textContent = "";
+        const cursor = el.nextElementSibling;
+        if (cursor) cursor.classList.add("typing");
+        let i = 0;
+        clearTimeout(twTimeout);
+        function step() {
+            if (i < text.length) {
+                el.textContent += text[i++];
+                twTimeout = setTimeout(step, speed);
+            } else if (cursor) cursor.classList.remove("typing");
+        }
+        step();
+    }
+
+    function startTitle() {
+        typewriter(document.getElementById("tw-text"), t("title"), 38);
+    }
+    startTitle();
+    window.addEventListener("langchange", startTitle);
+
     const expEl = document.getElementById("expYears");
-    if (expEl) {
+    let expCounted = false;
+    function countExpYears() {
+        if (!expEl || expCounted) return;
+        expCounted = true;
         const startYear = parseInt(expEl.dataset.from, 10);
         const target = Math.max(1, new Date().getFullYear() - startYear);
-        expEl.textContent = target + "+";
+        let current = 0;
+        const timer = setInterval(() => {
+            current += 1;
+            if (current >= target) {
+                current = target;
+                clearInterval(timer);
+            }
+            expEl.textContent = current + "+";
+        }, 90);
+    }
+    if (expEl) {
+        const expObs = new IntersectionObserver((entries) => {
+            entries.forEach((e) => {
+                if (!e.isIntersecting) return;
+                countExpYears();
+                expObs.unobserve(expEl);
+            });
+        }, { threshold: 0.5 });
+        expObs.observe(expEl);
+    }
+
+    const peekWrap = document.getElementById("heroAvatarWrap");
+    const peekBtn = document.getElementById("heroAvatarBtn");
+    const peekCard = document.getElementById("heroPeek");
+    const peekOverlay = document.getElementById("heroPeekOverlay");
+    const peekClose = document.getElementById("heroPeekClose");
+    const fineHover = window.matchMedia("(hover: hover) and (pointer: fine)");
+
+    function placePeekSide() {
+        if (!peekWrap || !peekCard || !fineHover.matches) {
+            peekWrap?.classList.remove("peek-left");
+            return;
+        }
+        const gap = 12;
+        const cardW = peekCard.offsetWidth || 300;
+        const rect = peekWrap.getBoundingClientRect();
+        const spaceRight = window.innerWidth - rect.right - gap - 16;
+        const spaceLeft = rect.left - gap - 16;
+        peekWrap.classList.toggle("peek-left", spaceRight < cardW && spaceLeft > spaceRight);
+    }
+
+    function setPeekOpen(open) {
+        if (!peekWrap || !peekBtn || !peekCard) return;
+        if (open) {
+            placePeekSide();
+            countExpYears();
+        }
+        peekWrap.classList.toggle("is-open", open);
+        peekBtn.setAttribute("aria-expanded", open ? "true" : "false");
+        peekCard.setAttribute("aria-hidden", open ? "false" : "true");
+        peekCard.setAttribute("aria-modal", open && !fineHover.matches ? "true" : "false");
+        if (peekOverlay) {
+            peekOverlay.hidden = !open || fineHover.matches;
+            peekOverlay.setAttribute("aria-hidden", peekOverlay.hidden ? "true" : "false");
+        }
+    }
+
+    if (peekBtn && peekWrap) {
+        let peekHideTimer = null;
+        peekWrap.addEventListener("mouseenter", () => {
+            if (!fineHover.matches) return;
+            clearTimeout(peekHideTimer);
+            setPeekOpen(true);
+        });
+        peekWrap.addEventListener("mouseleave", () => {
+            if (!fineHover.matches) return;
+            clearTimeout(peekHideTimer);
+            peekHideTimer = setTimeout(() => setPeekOpen(false), 120);
+        });
+        window.addEventListener("resize", () => {
+            if (peekWrap.classList.contains("is-open")) placePeekSide();
+        });
+        peekBtn.addEventListener("click", () => {
+            if (fineHover.matches) return;
+            setPeekOpen(!peekWrap.classList.contains("is-open"));
+        });
+        peekClose?.addEventListener("click", (e) => {
+            e.stopPropagation();
+            setPeekOpen(false);
+            peekBtn.focus();
+        });
+        peekOverlay?.addEventListener("click", () => setPeekOpen(false));
+        document.addEventListener("keydown", (e) => {
+            if (e.key !== "Escape") return;
+            if (peekWrap.classList.contains("is-open")) {
+                setPeekOpen(false);
+                peekBtn.focus();
+            } else if (fineHover.matches && peekWrap.contains(document.activeElement)) {
+                peekBtn.blur();
+            }
+        });
     }
 
     document.querySelectorAll(".timeline-item").forEach((item) => {
-        item.classList.add("visible");
+        const tl = new IntersectionObserver((entries) => {
+            entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("visible"); });
+        }, { threshold: 0.15 });
+        tl.observe(item);
     });
 
     document.querySelectorAll("#stackFilters button").forEach((btn) => {
@@ -15,25 +134,49 @@
             document.querySelectorAll("#stackFilters button").forEach((b) => b.classList.remove("active"));
             btn.classList.add("active");
             const filter = btn.dataset.filter;
-            document.querySelectorAll("#stackGrid > div").forEach((col) => {
-                col.classList.toggle("stack-filter-hidden", filter !== "all" && col.dataset.cat !== filter);
+            document.querySelectorAll("#stackGrid .stack-tile").forEach((tile) => {
+                tile.classList.toggle("stack-filter-hidden", filter !== "all" && tile.dataset.cat !== filter);
             });
         });
     });
 
+    function paintStackMeta() {
+        const tiles = [...document.querySelectorAll("#stackGrid .stack-tile")];
+        const counts = { all: tiles.length };
+        tiles.forEach((tile) => {
+            const cat = tile.dataset.cat;
+            counts[cat] = (counts[cat] || 0) + 1;
+        });
+        document.querySelectorAll("#stackFilters button").forEach((btn) => {
+            const n = btn.querySelector(".stack-n");
+            if (n) n.textContent = counts[btn.dataset.filter] || 0;
+        });
+        const total = document.getElementById("stackTotal");
+        if (total) total.textContent = t("stack_count").replace("{n}", String(counts.all));
+    }
+    paintStackMeta();
+    window.addEventListener("langchange", paintStackMeta);
+
     const emailCard = document.getElementById("emailCard");
-    const contactGrid = document.getElementById("contactGrid");
     const contactForm = document.getElementById("contactForm");
     if (emailCard && contactForm) {
+        function setEmailOpen(open) {
+            emailCard.classList.toggle("is-open", open);
+            emailCard.setAttribute("aria-expanded", open ? "true" : "false");
+        }
         emailCard.addEventListener("click", (e) => {
-            if (e.target.closest(".form-actions") || e.target.closest(".contact-form")) return;
-            contactForm.classList.toggle("open");
-            contactGrid.classList.toggle("form-open");
+            if (e.target.closest(".contact-form")) return;
+            setEmailOpen(!emailCard.classList.contains("is-open"));
+        });
+        emailCard.addEventListener("keydown", (e) => {
+            if (e.key !== "Enter" && e.key !== " ") return;
+            if (e.target !== emailCard) return;
+            e.preventDefault();
+            setEmailOpen(!emailCard.classList.contains("is-open"));
         });
         document.getElementById("formClose").addEventListener("click", (e) => {
             e.stopPropagation();
-            contactForm.classList.remove("open");
-            contactGrid.classList.remove("form-open");
+            setEmailOpen(false);
         });
         document.getElementById("formSend").addEventListener("click", (e) => {
             e.stopPropagation();
@@ -44,7 +187,7 @@
             const body = encodeURIComponent("Mensaje de " + name + ":\n\n" + msg);
             window.location.href = "mailto:daniel.barberoj@gmail.com?subject=" + subject + "&body=" + body;
             showToast(t("form_ok"));
-            contactForm.classList.remove("open");
+            setEmailOpen(false);
         });
     }
 
@@ -64,249 +207,96 @@
         });
     }
 
-    function moonPhase(date) {
-        const synodic = 29.530588853;
-        const known = Date.UTC(2000, 0, 6, 18, 14, 0);
-        const days = (date.getTime() - known) / 86400000;
-        const age = ((days % synodic) + synodic) % synodic;
-        const idx = Math.round((age / synodic) * 8) % 8;
-        const es = ["luna nueva", "creciente", "cuarto creciente", "gibosa creciente", "luna llena", "gibosa menguante", "cuarto menguante", "menguante"];
-        const en = ["new moon", "waxing crescent", "first quarter", "waxing gibbous", "full moon", "waning gibbous", "last quarter", "waning crescent"];
-        const illum = Math.round((1 - Math.cos((2 * Math.PI * age) / synodic)) / 2 * 100);
-        const lang = window.currentLang === "en" ? "en" : "es";
-        return { name: lang === "en" ? en[idx] : es[idx], illum };
+    const MUSIC_URI = "spotify:track:1FArbfTMXgDECU9zG3iY1X";
+    let spotifyCtrl = null;
+    let spotifyReady = false;
+    let pendingPlay = false;
+    let gestureKick = null;
+
+    function showMusicDock() {
+        const dock = document.getElementById("musicDock");
+        if (!dock) return;
+        dock.classList.add("open");
+        dock.setAttribute("aria-hidden", "false");
+    }
+
+    function disarmGesturePlay() {
+        if (!gestureKick) return;
+        document.removeEventListener("pointerdown", gestureKick, true);
+        gestureKick = null;
+    }
+
+    function playCannonball() {
+        pendingPlay = true;
+        if (!spotifyCtrl || !spotifyReady) return;
+        try { spotifyCtrl.restart(); } catch (_) {}
+        try { spotifyCtrl.play(); } catch (_) {}
+        try { spotifyCtrl.resume(); } catch (_) {}
+    }
+
+    function armGesturePlay() {
+        if (gestureKick) return;
+        gestureKick = (e) => {
+            if (e.type === "keydown") return;
+            playCannonball();
+            disarmGesturePlay();
+        };
+        document.addEventListener("pointerdown", gestureKick, true);
     }
 
     function closeMusicDock() {
         const dock = document.getElementById("musicDock");
         if (!dock) return;
         dock.classList.remove("open");
-        dock.hidden = true;
+        dock.setAttribute("aria-hidden", "true");
+        pendingPlay = false;
+        disarmGesturePlay();
+        if (spotifyCtrl) {
+            try { spotifyCtrl.pause(); } catch (_) {}
+        }
     }
-    function openMusicDock() {
+
+    function openMusicDock(autoplay) {
         const dock = document.getElementById("musicDock");
-        const frame = document.getElementById("musicFrame");
         if (!dock) return;
-        if (frame && !frame.getAttribute("src")) {
-            frame.src = frame.dataset.src;
-        }
-        dock.hidden = false;
-        dock.classList.add("open");
+        showMusicDock();
+        if (!autoplay) return;
+        playCannonball();
+        armGesturePlay();
     }
+
+    window.onSpotifyIframeApiReady = (IFrameAPI) => {
+        const el = document.getElementById("musicEmbed");
+        if (!el || !IFrameAPI) return;
+        IFrameAPI.createController(el, {
+            uri: MUSIC_URI,
+            height: 152,
+            width: "100%"
+        }, (ctrl) => {
+            spotifyCtrl = ctrl;
+            ctrl.addListener("ready", () => {
+                spotifyReady = true;
+                if (pendingPlay) {
+                    try { ctrl.restart(); } catch (_) {}
+                    try { ctrl.play(); } catch (_) {}
+                }
+            });
+            ctrl.addListener("playback_started", () => {
+                pendingPlay = false;
+                disarmGesturePlay();
+            });
+        });
+    };
+
+    if (!document.getElementById("spotifyIframeApi")) {
+        const s = document.createElement("script");
+        s.id = "spotifyIframeApi";
+        s.src = "https://open.spotify.com/embed/iframe-api/v1";
+        s.async = true;
+        document.head.appendChild(s);
+    }
+
     document.getElementById("musicClose")?.addEventListener("click", closeMusicDock);
-
-    const termCmds = [
-        { cmd: "whoami", out: () => t("term_whoami"), cd: 55, od: 28 },
-        { cmd: "cat orbit.txt", out: () => t("term_hobbies"), cd: 45, od: 14 },
-        { cmd: "ls ~/skills", out: "python.md  pandas.md  snowflake.md  dbt.md  react.md  fastapi.md  llm.md  luneta/  meteopanda/", cd: 40, od: 12 },
-        { cmd: "uptime", out: () => {
-            const now = new Date();
-            const secsToday = Math.floor((Date.now() - new Date().setHours(8, 0, 0, 0)) / 1000);
-            let ud = localStorage.getItem("term_uptime_days");
-            if (!ud) {
-                ud = Math.floor(Math.random() * 180) + 21;
-                localStorage.setItem("term_uptime_days", ud);
-            }
-            ud = parseInt(ud, 10);
-            const uph = Math.max(0, Math.floor(secsToday / 3600));
-            const upm = Math.max(0, Math.floor((secsToday % 3600) / 60));
-            const s = ud !== 1 ? "s" : "";
-            return `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")} ${t("term_uptime_fmt").replace("{d}", ud).replace("{s}", s).replace("{h}", uph).replace("{m}", String(upm).padStart(2, "0"))}`;
-        }, cd: 50, od: 18 },
-        { cmd: "uname -a", out: () => t("term_uname"), cd: 40, od: 10 },
-        { cmd: "curl -s playlist", out: () => {
-            const h = new Date().getHours();
-            const c = Math.min(Math.max(Math.floor(h * 0.45), 1), 7);
-            const phase = moonPhase(new Date());
-            return t("term_cafes").replace("{c}", c).replace("{r}", Math.round(70 / c)).replace("{m}", phase.name).replace("{illum}", phase.illum);
-        }, cd: 50, od: 16 }
-    ];
-
-    let termIndex = 0;
-    let termRunning = false;
-    let termRestartTimer = null;
-    let termStepTimer = null;
-    const termBody = document.getElementById("termBody");
-
-    function termType(el, text, speed, cb) {
-        let i = 0;
-        el.textContent = "";
-        (function step() {
-            if (!el.isConnected) return;
-            if (i < text.length) {
-                el.textContent += text[i++];
-                setTimeout(step, speed);
-            } else if (cb) cb();
-        })();
-    }
-
-    function attachPrompt() {
-        if (window.termKeyHandler) {
-            document.removeEventListener("keydown", window.termKeyHandler);
-            window.termKeyHandler = null;
-        }
-        const finalLine = document.createElement("div");
-        finalLine.className = "term-line";
-        const fp = document.createElement("span");
-        fp.className = "term-prompt";
-        fp.textContent = "devarber@orbit:~$ ";
-        let fi = document.createElement("span");
-        fi.className = "term-input";
-        let fc = document.createElement("span");
-        fc.className = "term-cursor";
-        finalLine.append(fp, fi, fc);
-        termBody.appendChild(finalLine);
-        termBody.scrollTop = termBody.scrollHeight;
-        let buf = "";
-        let idle = true;
-        const termKey = (e) => {
-            if (e.key === "Escape") {
-                const dock = document.getElementById("musicDock");
-                if (dock && !dock.hidden) {
-                    closeMusicDock();
-                    e.preventDefault();
-                    return;
-                }
-            }
-            if (!idle) return;
-            if (e.key === "Enter") {
-                e.preventDefault();
-                const cmd = buf.trim().toLowerCase();
-                buf = "";
-                fc.remove();
-                const outLine = document.createElement("div");
-                outLine.className = "term-line";
-                const out = document.createElement("span");
-                out.className = "term-output";
-                outLine.appendChild(out);
-                termBody.appendChild(outLine);
-                let resp = "";
-                if (cmd === "" || cmd === "help") resp = t("term_help");
-                else if (cmd === "whoami") resp = t("term_whoami");
-                else if (cmd === "luneta") resp = t("term_luneta");
-                else if (cmd === "moon") {
-                    resp = "devarber";
-                    idle = false;
-                    typeRespThen(() => { if (window.toggleNameConstellation) window.toggleNameConstellation(); });
-                    return;
-                }
-                else if (cmd === "music") {
-                    resp = "Lithe, Don Toliver — Cannonball";
-                    idle = false;
-                    typeRespThen(() => openMusicDock());
-                    return;
-                }
-                else if (cmd === "clear") {
-                    if (termRestartTimer) clearTimeout(termRestartTimer);
-                    if (window.termKeyHandler) {
-                        document.removeEventListener("keydown", window.termKeyHandler);
-                        window.termKeyHandler = null;
-                    }
-                    termBody.innerHTML = "";
-                    idle = false;
-                    termIndex = 0;
-                    termRunning = true;
-                    termRestartTimer = setTimeout(() => { termRestartTimer = null; runTerminal(); }, 400);
-                    return;
-                } else if (cmd === "l" || cmd === "luneta-mode") {
-                    resp = "🌙 Modo Luneta";
-                    idle = false;
-                    typeRespThen(() => setLanguage("l"));
-                    return;
-                } else resp = t("term_not_found").replace("{cmd}", cmd);
-
-                function typeRespThen(done) {
-                    let i = 0;
-                    (function typeResp() {
-                        if (!out.isConnected) return;
-                        if (i < resp.length) {
-                            out.textContent += resp[i++];
-                            setTimeout(typeResp, 16);
-                        } else if (done) setTimeout(done, 350);
-                        else {
-                            attachPrompt();
-                            idle = true;
-                        }
-                    })();
-                }
-                idle = false;
-                typeRespThen();
-            } else if (e.key === "Backspace") {
-                buf = buf.slice(0, -1);
-                fi.textContent = buf;
-                e.preventDefault();
-            } else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
-                e.preventDefault();
-                buf += e.key;
-                fi.textContent = buf;
-            }
-        };
-        document.addEventListener("keydown", termKey);
-        window.termKeyHandler = termKey;
-    }
-
-    function runTerminal() {
-        if (!termBody || termIndex >= termCmds.length || !termRunning) return;
-        const entry = termCmds[termIndex];
-        const line = document.createElement("div");
-        line.className = "term-line";
-        const prompt = document.createElement("span");
-        prompt.className = "term-prompt";
-        prompt.textContent = "devarber@orbit:~$ ";
-        const cmd = document.createElement("span");
-        cmd.className = "term-cmd";
-        const cursor = document.createElement("span");
-        cursor.className = "term-cursor";
-        line.append(prompt, cmd, cursor);
-        termBody.appendChild(line);
-        termBody.scrollTop = termBody.scrollHeight;
-        termType(cmd, entry.cmd, entry.cd || 50, () => {
-            cursor.remove();
-            const outLine = document.createElement("div");
-            outLine.className = "term-line";
-            const out = document.createElement("span");
-            out.className = "term-output";
-            outLine.appendChild(out);
-            termBody.appendChild(outLine);
-            const outText = typeof entry.out === "function" ? entry.out() : entry.out;
-            termType(out, outText, entry.od || 18, () => {
-                termIndex++;
-                if (termIndex >= termCmds.length) {
-                    attachPrompt();
-                    return;
-                }
-                termStepTimer = setTimeout(() => { termStepTimer = null; runTerminal(); }, 1100);
-            });
-        });
-    }
-
-    function resetTerminal() {
-        if (!termBody) return;
-        if (window.termKeyHandler) {
-            document.removeEventListener("keydown", window.termKeyHandler);
-            window.termKeyHandler = null;
-        }
-        if (termRestartTimer) clearTimeout(termRestartTimer);
-        if (termStepTimer) clearTimeout(termStepTimer);
-        termBody.innerHTML = "";
-        termIndex = 0;
-        termRunning = true;
-        termRestartTimer = setTimeout(() => { termRestartTimer = null; runTerminal(); }, 500);
-    }
-
-    const termEl = document.getElementById("terminal");
-    if (termEl && termBody) {
-        const termObs = new IntersectionObserver((entries) => {
-            entries.forEach((e) => {
-                if (e.isIntersecting && !termRunning) {
-                    termRunning = true;
-                    runTerminal();
-                }
-            });
-        }, { threshold: 0.3 });
-        termObs.observe(termEl);
-        window.addEventListener("langchange", () => {
-            if (termBody.children.length) resetTerminal();
-        });
-    }
+    window.openMusicDock = openMusicDock;
+    window.closeMusicDock = closeMusicDock;
 })();

@@ -140,7 +140,7 @@
     function drawName(time) {
         if (nameReveal < 0.01) return;
         const cs = getComputedStyle(document.documentElement);
-        const gold = cs.getPropertyValue("--gold").trim() || "#c9a86c";
+        const gold = cs.getPropertyValue("--gold").trim() || "#b8a0e0";
         const moonC = cs.getPropertyValue("--moon").trim() || "#f2e9d8";
         ctx.save();
         ctx.globalAlpha = nameReveal * 0.95;

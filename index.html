@@ -33,6 +33,7 @@
 </head>
 <body>
     <canvas id="skyCanvas"></canvas>
+    <div id="cursorHalo" class="cursor-halo" aria-hidden="true"></div>
     <div class="sky-moon" id="skyMoon" role="button" tabindex="0" title="Doble clic" aria-label="Luna — doble clic"></div>
     <div id="scroll-progress"></div>
     <button id="back-to-top" aria-label="Volver arriba">↑</button>
@@ -50,11 +51,13 @@
         <div class="nav-links" id="navLinks">
             <a href="#about" data-i18n="nav_about">Sobre mí</a>
             <a href="#projects" data-i18n="nav_projects">Proyectos</a>
-            <a href="#experience" data-i18n="nav_exp">Experiencia</a>
+            <a href="#experience" data-i18n="nav_exp">Recorrido</a>
             <a href="#firma" data-i18n="nav_firma">Destrezas</a>
+            <a href="#stack" data-i18n="nav_stack">Stack</a>
             <a href="#contact" data-i18n="nav_contact">Contacto</a>
             <span class="nav-sep">|</span>
             <a href="/pages/now/" data-i18n="nav_now">Now</a>
+            <a href="/pages/tools/" data-i18n="nav_tools">Music tools</a>
         </div>
         <div class="nav-right">
             <button class="theme-btn" id="themeToggle" aria-label="Tema">☀</button>
@@ -71,26 +74,36 @@
                 <h1 class="hero-name">Daniel Barbero Jiménez</h1>
                 <p class="hero-name handle" id="heroHandle">devarber</p>
             </div>
-            <div class="hero-avatar">
-                <img src="/assets/img/avatar.png" alt="devarber" width="260" height="260">
+            <div class="hero-avatar-wrap" id="heroAvatarWrap">
+                <button type="button" class="hero-avatar" id="heroAvatarBtn" aria-expanded="false" aria-controls="heroPeek">
+                    <img src="/assets/img/avatar.png" alt="devarber" width="260" height="260">
+                    <span class="visually-hidden" data-i18n="peek_open">Ver datos</span>
+                </button>
+                <div class="hero-peek" id="heroPeek" role="dialog" aria-hidden="true">
+                    <button type="button" class="hero-peek-close" id="heroPeekClose">
+                        <span class="visually-hidden" data-i18n="peek_close">Cerrar</span>
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <div class="hero-peek-stats">
+                        <div class="hero-stat">
+                            <div class="hero-stat-num" id="expYears" data-from="2024">0+</div>
+                            <div class="hero-stat-label" data-i18n="stat_exp">Años de experiencia</div>
+                        </div>
+                        <div class="hero-stat">
+                            <div class="hero-stat-num">4</div>
+                            <div class="hero-stat-label" data-i18n="stat_certs">Certificaciones</div>
+                        </div>
+                        <div class="hero-stat">
+                            <div class="hero-stat-num">∞</div>
+                            <div class="hero-stat-label" data-i18n="stat_music">Horas de música</div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <h2 class="hero-title" id="tw-text" data-i18n="title">Data engineer · AI engineer · Full stack</h2>
+            <div class="hero-peek-overlay" id="heroPeekOverlay" hidden aria-hidden="true"></div>
+            <h2 class="hero-title"><span id="tw-text"></span><span class="cursor"></span></h2>
             <p class="hero-loc" data-i18n="loc">Granada ↔ Madrid</p>
             <p class="hero-desc" data-i18n="desc">Ingeniero de datos y de IA, y full stack junior. Python como estilo de vida, Windows también es un SO. Proyectos propios en órbita.</p>
-            <div class="hero-stats">
-                <div class="hero-stat">
-                    <div class="hero-stat-num" id="expYears" data-from="2024">2+</div>
-                    <div class="hero-stat-label" data-i18n="stat_exp">Años de experiencia</div>
-                </div>
-                <div class="hero-stat">
-                    <div class="hero-stat-num">4</div>
-                    <div class="hero-stat-label" data-i18n="stat_certs">Certificaciones</div>
-                </div>
-                <div class="hero-stat">
-                    <div class="hero-stat-num">∞</div>
-                    <div class="hero-stat-label" data-i18n="stat_music">Horas de música</div>
-                </div>
-            </div>
             <div class="hero-cta">
                 <a href="#projects" class="btn btn-primary"><span data-i18n="cta_projects">Proyectos</span></a>
                 <a href="#contact" class="btn btn-secondary"><span data-i18n="cta_contact">Contactar</span></a>
@@ -120,63 +133,135 @@
         </div>
     </section>
 
-    <section id="projects" class="section">
-        <h2 class="section-title"><span class="title-text" data-i18n="projects_title">Proyectos</span></h2>
-        <div class="projects-grid">
-            <a class="project-card" href="https://xrforyouthethic.org" target="_blank" rel="noopener">
-                <span class="project-kicker" data-i18n="proj_luneta_kicker">XR · ética · IA</span>
-                <h3>Luneta</h3>
-                <p data-i18n="proj_luneta_d"></p>
-                <span class="project-stack">React · TypeScript · FastAPI · MongoDB · Docker · LLMs</span>
-            </a>
-            <a class="project-card" href="https://github.com/devarber-beep/MeteoPanda" target="_blank" rel="noopener">
-                <span class="project-kicker" data-i18n="proj_meteo_kicker">Datos · clima</span>
-                <h3>MeteoPanda</h3>
-                <p data-i18n="proj_meteo_d"></p>
-                <span class="project-stack">Python · ELT · DuckDB · Streamlit</span>
-            </a>
-            <div class="project-card orbit">
-                <span class="project-kicker" data-i18n="proj_orbit_kicker">En órbita</span>
-                <h3 data-i18n="proj_orbit_title">Más proyectos</h3>
-                <p data-i18n="proj_orbit_d"></p>
-                <span class="project-stack">WIP</span>
+    <section id="terminal" class="section terminal-section">
+        <h2 class="section-title terminal-label"><span data-i18n="arcade_title">martians.py</span></h2>
+        <div class="terminal-window arcade-cabinet">
+            <div class="term-bar">
+                <span class="term-dot red"></span>
+                <span class="term-dot yellow"></span>
+                <span class="term-dot green"></span>
+                <span class="term-title" data-i18n="arcade_bar">devarber@orbit:~/martians.py</span>
+                <span class="arcade-mode" id="arcadeMode" data-i18n="arcade_auto">auto</span>
             </div>
+            <canvas id="arcadeCanvas" width="800" height="420" aria-label="Marcianitos de órbita"></canvas>
+            <p class="arcade-hint" data-i18n="arcade_hint">Se juega solo. Toca o mueve el ratón para coger la nave. Dispara a MUSIC y MOON.</p>
+            <div class="arcade-board" id="arcadeBoard" aria-live="polite"></div>
+        </div>
+    </section>
+
+    <section id="projects" class="section">
+        <div class="projects-head">
+            <h2 class="section-title"><span class="title-text" data-i18n="projects_title">Proyectos propios</span></h2>
+            <a class="projects-gh" href="https://github.com/devarber-beep" target="_blank" rel="noopener" data-i18n="proj_github">Ver en GitHub</a>
+        </div>
+
+        <a class="project-hero" href="https://xrforyouthethic.org" target="_blank" rel="noopener">
+            <div class="project-visual project-visual-luneta" aria-hidden="true">
+                <span class="project-moon"></span>
+                <span class="project-badge" data-i18n="proj_featured">Destacado</span>
+            </div>
+            <div class="project-hero-body">
+                <span class="project-kicker" data-i18n="proj_luneta_kicker">XR · ética · IA</span>
+                <h3>XR for Youth Ethics</h3>
+                <p class="project-sub" data-i18n="proj_luneta_sub">Consorcio · University of Iowa</p>
+                <p data-i18n="proj_luneta_d"></p>
+                <ul class="project-tags">
+                    <li>React</li>
+                    <li>TypeScript</li>
+                    <li>FastAPI</li>
+                    <li>MongoDB</li>
+                    <li>Docker</li>
+                    <li>LLMs</li>
+                </ul>
+            </div>
+        </a>
+
+        <div class="projects-grid">
+            <a class="project-card" href="https://github.com/devarber-beep/MeteoPanda" target="_blank" rel="noopener">
+                <div class="project-visual project-visual-meteo" aria-hidden="true">
+                    <span class="project-chart"></span>
+                    <span class="project-status" data-i18n="proj_done">Completado</span>
+                </div>
+                <div class="project-body">
+                    <h3>MeteoPanda</h3>
+                    <p class="project-sub" data-i18n="proj_meteo_sub">Clima histórico</p>
+                    <p data-i18n="proj_meteo_d"></p>
+                    <ul class="project-tags">
+                        <li>Python</li>
+                        <li>ELT</li>
+                        <li>DuckDB</li>
+                        <li>Streamlit</li>
+                    </ul>
+                </div>
+            </a>
+            <article class="project-card orbit">
+                <div class="project-visual project-visual-orbit" aria-hidden="true">
+                    <span class="project-status" data-i18n="proj_orbit_kicker">En órbita</span>
+                </div>
+                <div class="project-body">
+                    <h3 data-i18n="proj_orbit_title">Siguiente pieza</h3>
+                    <p data-i18n="proj_orbit_d"></p>
+                </div>
+            </article>
         </div>
     </section>
 
     <section id="experience" class="section">
-        <h2 class="section-title"><span class="title-text" data-i18n="exp_title">Experiencia</span></h2>
-        <div class="timeline">
-            <div class="timeline-item current">
-                <div class="timeline-content open-role">
-                    <div class="timeline-date" data-i18n="open_date">Actualidad</div>
-                    <div class="timeline-company"><span data-i18n="open_company">En búsqueda</span> · <span class="role" data-i18n="open_role">Data / AI / Full stack</span></div>
-                    <div class="timeline-desc" data-i18n="open_desc"></div>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <div class="timeline-date" data-i18n="ceva_date">2025</div>
-                    <div class="timeline-company"><span data-i18n="ceva_company">IT Ceva Logistics</span> · <span class="role" data-i18n="ceva_role">Process Flow / IT</span></div>
-                    <div class="timeline-desc" data-i18n="ceva_desc"></div>
-                    <ul class="timeline-bullets">
+        <h2 class="section-title"><span class="title-text" data-i18n="exp_title">Experiencia y formación</span></h2>
+        <div class="path-grid">
+            <div class="path-col">
+                <h3 class="path-heading" data-i18n="path_work">Experiencia laboral</h3>
+                <article class="path-entry current">
+                    <div class="path-entry-head">
+                        <h4 data-i18n="open_role">Junior full stack · Data engineer</h4>
+                        <span class="path-pill" data-i18n="open_date">Actualidad</span>
+                    </div>
+                    <p class="path-org" data-i18n="open_company">En búsqueda activa</p>
+                    <p class="path-desc" data-i18n="open_desc"></p>
+                </article>
+                <article class="path-entry">
+                    <h4 data-i18n="ceva_role">Process Flow / IT</h4>
+                    <p class="path-org" data-i18n="ceva_company">IT Ceva Logistics</p>
+                    <p class="path-when" data-i18n="ceva_date">2025 · Países Bajos</p>
+                    <p class="path-desc" data-i18n="ceva_desc"></p>
+                    <ul class="path-bullets">
                         <li data-i18n="ceva_1"></li>
                         <li data-i18n="ceva_2"></li>
                         <li data-i18n="ceva_3"></li>
                     </ul>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <div class="timeline-date" data-i18n="gd_date">2024 · 6 meses</div>
-                    <div class="timeline-company"><span data-i18n="gd_company">Granada Dynamics</span> · <span class="role" data-i18n="gd_role">Backend Python Developer</span></div>
-                    <ul class="timeline-bullets">
+                    <p class="path-tags">Python · Tableau · Git</p>
+                </article>
+                <article class="path-entry">
+                    <h4 data-i18n="gd_role">Backend Python Developer</h4>
+                    <p class="path-org" data-i18n="gd_company">Granada Dynamics</p>
+                    <p class="path-when" data-i18n="gd_date">2024 · 6 meses</p>
+                    <ul class="path-bullets">
                         <li data-i18n="gd_1"></li>
                         <li data-i18n="gd_2"></li>
                         <li data-i18n="gd_3"></li>
-                        <li data-i18n="gd_4"></li>
                     </ul>
-                </div>
+                    <p class="path-tags">Python · Pytest · Docker · Git</p>
+                </article>
+            </div>
+            <div class="path-col">
+                <h3 class="path-heading" data-i18n="path_edu">Formación</h3>
+                <article class="path-entry">
+                    <h4 data-i18n="uni_name">Universidad de Granada</h4>
+                    <p class="path-when" data-i18n="uni_date"></p>
+                </article>
+                <article class="path-entry">
+                    <h4 data-i18n="civica_name">Cívica Software</h4>
+                    <p class="path-when" data-i18n="civica_date"></p>
+                </article>
+                <article class="path-entry">
+                    <h4 data-i18n="certs_title">Certificaciones</h4>
+                    <ul class="path-certs">
+                        <li><a href="https://www.linkedin.com/in/danielbarero/details/certifications/1723889174905/single-media-viewer/?profileId=ACoAACWJp70BIuj6S6pv0HPJOBqFsMRHkeifYSQ" target="_blank" rel="noopener">AWS Cloud Practitioner</a></li>
+                        <li><a href="https://www.linkedin.com/in/danielbarero/details/certifications/1723889110331/single-media-viewer/?profileId=ACoAACWJp70BIuj6S6pv0HPJOBqFsMRHkeifYSQ" target="_blank" rel="noopener">AWS Developer Associate</a></li>
+                        <li><a href="https://achieve.snowflake.com/34bf3b0b-6caa-4439-9ea7-8f5c86bb422d" target="_blank" rel="noopener">Snowflake Data Engineering</a></li>
+                        <li><a href="https://achieve.snowflake.com/cfd7afb0-4baf-4b2a-b28b-8821aad342db" target="_blank" rel="noopener">Snowflake Data Warehousing</a></li>
+                    </ul>
+                </article>
             </div>
         </div>
     </section>
@@ -185,56 +270,155 @@
         <h2 class="section-title"><span class="title-text" data-i18n="firma_title">Destrezas</span></h2>
         <div class="craft-grid">
             <article class="craft-card">
-                <h3 data-i18n="craft_data_title">Ingeniería de datos</h3>
-                <p data-i18n="craft_data"></p>
+                <div class="craft-icon craft-icon-data" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg>
+                </div>
+                <div class="craft-body">
+                    <h3 data-i18n="craft_data_title">Ingeniería de datos</h3>
+                    <p data-i18n="craft_data"></p>
+                </div>
             </article>
             <article class="craft-card">
-                <h3 data-i18n="craft_ai_title">Ingeniería de IA</h3>
-                <p data-i18n="craft_ai"></p>
+                <div class="craft-icon craft-icon-ai" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="3.2"/></svg>
+                </div>
+                <div class="craft-body">
+                    <h3 data-i18n="craft_ai_title">Ingeniería de IA</h3>
+                    <p data-i18n="craft_ai"></p>
+                </div>
             </article>
-            <article class="craft-card wide">
-                <h3 data-i18n="craft_fs_title">Full stack</h3>
-                <p data-i18n="craft_fs"></p>
+            <article class="craft-card">
+                <div class="craft-icon craft-icon-fs" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 18v2M16 18v2M8 13h.01M12 13h.01M16 13h.01"/></svg>
+                </div>
+                <div class="craft-body">
+                    <h3 data-i18n="craft_fs_title">Full stack</h3>
+                    <p data-i18n="craft_fs"></p>
+                </div>
+            </article>
+        </div>
+        <p class="craft-kicker" data-i18n="craft_more_kicker">Cómo trabajo</p>
+        <div class="skill-grid">
+            <article class="skill-card">
+                <div class="skill-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 5v.01M12 19v.01M5 12h.01M19 12h.01M7.05 7.05h.01M16.95 16.95h.01M7.05 16.95h.01M16.95 7.05h.01"/></svg>
+                </div>
+                <div>
+                    <h3 data-i18n="skill_detail_title">Atención al dato</h3>
+                    <p data-i18n="skill_detail"></p>
+                </div>
+            </article>
+            <article class="skill-card">
+                <div class="skill-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19 14 4M10 20l10-15"/><circle cx="6.5" cy="19" r="1.4"/><circle cx="17.5" cy="5" r="1.4"/></svg>
+                </div>
+                <div>
+                    <h3 data-i18n="skill_judge_title">IA aplicada</h3>
+                    <p data-i18n="skill_judge"></p>
+                </div>
+            </article>
+            <article class="skill-card">
+                <div class="skill-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16v11H4z"/><path d="M8 7V5h8v2"/></svg>
+                </div>
+                <div>
+                    <h3 data-i18n="skill_product_title">Producto, no demo</h3>
+                    <p data-i18n="skill_product"></p>
+                </div>
+            </article>
+            <article class="skill-card">
+                <div class="skill-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 18c2.5-4 5.5-6 8-6s5.5 2 8 6"/><path d="M8 10.5 12 4l4 6.5"/></svg>
+                </div>
+                <div>
+                    <h3 data-i18n="skill_python_title">Python primero</h3>
+                    <p data-i18n="skill_python"></p>
+                </div>
             </article>
         </div>
     </section>
 
-    <section id="education" class="section">
-        <h2 class="section-title"><span class="title-text" data-i18n="edu_title">Formación</span></h2>
-        <div class="edu-grid">
-            <div class="edu-card">
-                <h3 data-i18n="uni_name">Universidad de Granada</h3>
-                <span class="subtitle" data-i18n="uni_date"></span>
-            </div>
-            <div class="edu-card">
-                <h3 data-i18n="civica_name">Cívica Software</h3>
-                <span class="subtitle" data-i18n="civica_date"></span>
-            </div>
-            <div class="edu-card full">
-                <h3 data-i18n="certs_title">Certificaciones</h3>
-                <ul>
-                    <li><a href="https://www.linkedin.com/in/danielbarero/details/certifications/1723889174905/single-media-viewer/?profileId=ACoAACWJp70BIuj6S6pv0HPJOBqFsMRHkeifYSQ" target="_blank" rel="noopener">AWS Cloud Practitioner</a></li>
-                    <li><a href="https://www.linkedin.com/in/danielbarero/details/certifications/1723889110331/single-media-viewer/?profileId=ACoAACWJp70BIuj6S6pv0HPJOBqFsMRHkeifYSQ" target="_blank" rel="noopener">AWS Developer Associate</a></li>
-                    <li><a href="https://achieve.snowflake.com/34bf3b0b-6caa-4439-9ea7-8f5c86bb422d" target="_blank" rel="noopener">Snowflake Data Engineering</a></li>
-                    <li><a href="https://achieve.snowflake.com/cfd7afb0-4baf-4b2a-b28b-8821aad342db" target="_blank" rel="noopener">Snowflake Data Warehousing</a></li>
-                </ul>
-            </div>
+    <section id="stack" class="section">
+        <h2 class="section-title"><span class="title-text" data-i18n="stack_title">Stack tecnológico</span></h2>
+        <p class="stack-kicker" data-i18n="stack_core">Stack principal</p>
+        <div class="stack-core">
+            <article class="stack-tile stack-tile-lg"><img src="https://cdn.simpleicons.org/python/3776AB" alt="" width="36" height="36"><span>Python</span></article>
+            <article class="stack-tile stack-tile-lg"><span class="stack-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></span><span>SQL</span></article>
+            <article class="stack-tile stack-tile-lg"><img src="https://cdn.simpleicons.org/react/61DAFB" alt="" width="36" height="36"><span>React</span></article>
+            <article class="stack-tile stack-tile-lg"><img src="https://cdn.simpleicons.org/fastapi/009688" alt="" width="36" height="36"><span>FastAPI</span></article>
+            <article class="stack-tile stack-tile-lg"><img src="https://cdn.simpleicons.org/snowflake/29B5E8" alt="" width="36" height="36"><span>Snowflake</span></article>
+            <article class="stack-tile stack-tile-lg"><img src="https://cdn.jsdelivr.net/npm/simple-icons@11/icons/dbt.svg" alt="" width="36" height="36" class="stack-icon-ink"><span>dbt</span></article>
+            <article class="stack-tile stack-tile-lg"><img src="https://cdn.jsdelivr.net/npm/simple-icons@11/icons/amazonaws.svg" alt="" width="36" height="36" class="stack-icon-ink"><span>AWS</span></article>
+            <article class="stack-tile stack-tile-lg"><img src="https://cdn.simpleicons.org/docker/2496ED" alt="" width="36" height="36"><span>Docker</span></article>
         </div>
+        <div class="stack-all-head">
+            <span data-i18n="stack_all">Todas las tecnologías</span>
+            <span class="stack-all-line"></span>
+        </div>
+        <div class="stack-filters" id="stackFilters">
+            <button type="button" class="active" data-filter="all"><span data-i18n="filter_all">Todo</span><span class="stack-n">0</span></button>
+            <button type="button" data-filter="langs"><span data-i18n="filter_langs">Lenguajes</span><span class="stack-n">0</span></button>
+            <button type="button" data-filter="frameworks"><span data-i18n="filter_frameworks">Frameworks</span><span class="stack-n">0</span></button>
+            <button type="button" data-filter="data"><span data-i18n="filter_data">Datos</span><span class="stack-n">0</span></button>
+            <button type="button" data-filter="cloud"><span data-i18n="filter_cloud">Cloud</span><span class="stack-n">0</span></button>
+            <button type="button" data-filter="ia"><span data-i18n="filter_ia">IA</span><span class="stack-n">0</span></button>
+            <button type="button" data-filter="dbs"><span data-i18n="filter_dbs">BBDD</span><span class="stack-n">0</span></button>
+        </div>
+        <div class="stack-grid" id="stackGrid">
+            <article class="stack-tile" data-cat="langs"><img src="https://cdn.simpleicons.org/python/3776AB" alt="" width="28" height="28"><span>Python</span></article>
+            <article class="stack-tile" data-cat="langs"><span class="stack-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></span><span>SQL</span></article>
+            <article class="stack-tile" data-cat="langs"><img src="https://cdn.simpleicons.org/javascript/F7DF1E" alt="" width="28" height="28"><span>JavaScript</span></article>
+            <article class="stack-tile" data-cat="langs"><img src="https://cdn.simpleicons.org/typescript/3178C6" alt="" width="28" height="28"><span>TypeScript</span></article>
+            <article class="stack-tile" data-cat="langs"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg" alt="" width="28" height="28"><span>Java</span></article>
+            <article class="stack-tile" data-cat="langs"><img src="https://cdn.simpleicons.org/cplusplus/00599C" alt="" width="28" height="28"><span>C++</span></article>
+            <article class="stack-tile" data-cat="frameworks"><img src="https://cdn.simpleicons.org/fastapi/009688" alt="" width="28" height="28"><span>FastAPI</span></article>
+            <article class="stack-tile" data-cat="frameworks"><img src="https://cdn.simpleicons.org/flask/FFFFFF" alt="" width="28" height="28" class="stack-icon-on-dark"><span>Flask</span></article>
+            <article class="stack-tile" data-cat="frameworks"><img src="https://cdn.simpleicons.org/django/44B78B" alt="" width="28" height="28"><span>Django</span></article>
+            <article class="stack-tile" data-cat="frameworks"><img src="https://cdn.simpleicons.org/nodedotjs/339933" alt="" width="28" height="28"><span>Node.js</span></article>
+            <article class="stack-tile" data-cat="frameworks"><img src="https://cdn.simpleicons.org/react/61DAFB" alt="" width="28" height="28"><span>React</span></article>
+            <article class="stack-tile" data-cat="frameworks"><img src="https://cdn.simpleicons.org/streamlit/FF4B4B" alt="" width="28" height="28"><span>Streamlit</span></article>
+            <article class="stack-tile" data-cat="frameworks"><img src="https://cdn.simpleicons.org/framer/0055FF" alt="" width="28" height="28"><span>Framer</span></article>
+            <article class="stack-tile" data-cat="data"><img src="https://cdn.simpleicons.org/snowflake/29B5E8" alt="" width="28" height="28"><span>Snowflake</span></article>
+            <article class="stack-tile" data-cat="data"><img src="https://cdn.jsdelivr.net/npm/simple-icons@11/icons/dbt.svg" alt="" width="28" height="28" class="stack-icon-ink"><span>dbt</span></article>
+            <article class="stack-tile" data-cat="data"><img src="https://cdn.simpleicons.org/pandas/E70488" alt="" width="28" height="28"><span>pandas</span></article>
+            <article class="stack-tile" data-cat="data"><img src="https://cdn.jsdelivr.net/npm/simple-icons@11/icons/tableau.svg" alt="" width="28" height="28" class="stack-icon-ink"><span>Tableau</span></article>
+            <article class="stack-tile" data-cat="data"><span class="stack-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 7h4v4H7zM13 7h4v4h-4zM7 13h4v4H7zM13 13h4v4h-4z"/></svg></span><span>ELT</span></article>
+            <article class="stack-tile" data-cat="cloud"><img src="https://cdn.jsdelivr.net/npm/simple-icons@11/icons/amazonaws.svg" alt="" width="28" height="28" class="stack-icon-ink"><span>AWS</span></article>
+            <article class="stack-tile" data-cat="cloud"><img src="https://cdn.simpleicons.org/docker/2496ED" alt="" width="28" height="28"><span>Docker</span></article>
+            <article class="stack-tile" data-cat="cloud"><img src="https://cdn.simpleicons.org/git/F05032" alt="" width="28" height="28"><span>Git</span></article>
+            <article class="stack-tile" data-cat="cloud"><img src="https://cdn.simpleicons.org/gitlab/FC6D26" alt="" width="28" height="28"><span>GitLab</span></article>
+            <article class="stack-tile" data-cat="cloud"><img src="https://cdn.simpleicons.org/githubactions/2088FF" alt="" width="28" height="28"><span>CI/CD</span></article>
+            <article class="stack-tile" data-cat="cloud"><img src="https://cdn.simpleicons.org/insomnia/4000BF" alt="" width="28" height="28"><span>Insomnia</span></article>
+            <article class="stack-tile" data-cat="cloud"><img src="https://cdn.simpleicons.org/autocad/E51050" alt="" width="28" height="28"><span>AutoCAD</span></article>
+            <article class="stack-tile" data-cat="ia"><span class="stack-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><circle cx="12" cy="12" r="3.2"/></svg></span><span>LLMs</span></article>
+            <article class="stack-tile" data-cat="ia"><span class="stack-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="8" width="14" height="10" rx="3"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M9 4h6v4H9z"/></svg></span><span>Agents</span></article>
+            <article class="stack-tile" data-cat="ia"><span class="stack-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 20 19 4"/><path d="M9 4h6l4 8H5z"/></svg></span><span>RAG</span></article>
+            <article class="stack-tile" data-cat="ia"><span class="stack-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5h10l6 6v8z"/><path d="M14 5v6h6"/></svg></span><span>AI-assisted</span></article>
+            <article class="stack-tile" data-cat="dbs"><img src="https://cdn.simpleicons.org/duckdb/FFF000" alt="" width="28" height="28"><span>DuckDB</span></article>
+            <article class="stack-tile" data-cat="dbs"><img src="https://cdn.simpleicons.org/mongodb/47A248" alt="" width="28" height="28"><span>MongoDB</span></article>
+        </div>
+        <p class="stack-total" id="stackTotal"></p>
     </section>
 
     <section id="contact" class="section">
         <h2 class="section-title"><span class="title-text" data-i18n="contact_title">Contacto</span></h2>
         <div class="contact-grid" id="contactGrid">
-            <div class="contact-card" id="emailCard">
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>
-                <span class="label">Email</span>
-                <span class="value">daniel.barberoj@gmail.com</span>
-                <div class="contact-form" id="contactForm">
-                    <input id="formName" type="text" data-i18n-placeholder="form_name" placeholder="Nombre">
-                    <textarea id="formMsg" data-i18n-placeholder="form_msg" placeholder="Mensaje"></textarea>
-                    <div class="form-actions">
-                        <button type="button" class="form-close" id="formClose" data-i18n="form_close">Cerrar</button>
-                        <button type="button" class="form-send" id="formSend" data-i18n="form_send">Enviar</button>
+            <div class="contact-card email-flip" id="emailCard" role="button" tabindex="0" aria-expanded="false">
+                <div class="email-flip-inner">
+                    <div class="email-face email-front">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>
+                        <span class="label">Email</span>
+                        <span class="value">daniel.barberoj@gmail.com</span>
+                    </div>
+                    <div class="email-face email-back">
+                        <div class="contact-form" id="contactForm">
+                            <input id="formName" type="text" data-i18n-placeholder="form_name" placeholder="Nombre">
+                            <textarea id="formMsg" data-i18n-placeholder="form_msg" placeholder="Mensaje"></textarea>
+                            <div class="form-actions">
+                                <button type="button" class="form-close" id="formClose" data-i18n="form_close">Cerrar</button>
+                                <button type="button" class="form-send" id="formSend" data-i18n="form_send">Enviar</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -255,9 +439,18 @@
         <p data-i18n="footer_built">Spain · 2026 · devarber</p>
     </footer>
 
+    <div id="musicDock" class="music-dock" aria-hidden="true">
+        <div class="music-bar">
+            <span>Lithe, Don Toliver — Cannonball</span>
+            <button type="button" class="music-close" id="musicClose" aria-label="Cerrar">×</button>
+        </div>
+        <div id="musicEmbed"></div>
+    </div>
+
     <script src="/assets/js/i18n.js"></script>
     <script src="/assets/js/sky.js"></script>
     <script src="/assets/js/common.js"></script>
     <script src="/assets/js/home.js"></script>
+    <script src="/assets/js/arcade.js"></script>
 </body>
 </html>
